@@ -153,7 +153,7 @@ void select_file_popup(const char *prompt, StringCallback callback,
 		ImGui::EndChild();
 		if (!selectFile)
 		{
-			if (ImGui::Button("Select Current Directory", ScaledVec2(0, 30)))
+			if (ImGui::Button("选择当前目录", ScaledVec2(0, 30)))
 			{
 				if (callback(false, select_current_directory))
 				{
@@ -163,7 +163,7 @@ void select_file_popup(const char *prompt, StringCallback callback,
 			}
 			ImGui::SameLine();
 		}
-		if (ImGui::Button("Cancel", ScaledVec2(0, 30)))
+		if (ImGui::Button("取消", ScaledVec2(0, 30)))
 		{
 			subfolders_read = false;
 			callback(true, "");
