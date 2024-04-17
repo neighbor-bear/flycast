@@ -201,7 +201,7 @@ void Do_Exception(u32 epc, Sh4ExceptionCode expEvn)
 	assert((expEvn >= Sh4Ex_TlbMissRead && expEvn <= Sh4Ex_SlotIllegalInstr)
 			|| expEvn == Sh4Ex_FpuDisabled || expEvn == Sh4Ex_SlotFpuDisabled || expEvn == Sh4Ex_UserBreak);
 	if (sr.BL != 0)
-		throw FlycastException("Fatal: SH4 exception when blocked");
+		throw FlycastException("致命错误：在阻塞时发生SH4异常");
 	CCN_EXPEVT = expEvn;
 
 	ssr = sh4_sr_GetFull();

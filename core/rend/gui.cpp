@@ -541,12 +541,12 @@ void gui_stop_game(const std::string& message)
 		gui_setState(GuiState::Main);
 		reset_vmus();
 		if (!message.empty())
-			gui_error("Flycast has stopped.\n\n" + message);
+			gui_error("Flycast已停止\n\n" + message);
 	}
 	else
 	{
 		if (!message.empty())
-			ERROR_LOG(COMMON, "Flycast has stopped: %s", message.c_str());
+			ERROR_LOG(COMMON, "Flycast已停止: %s", message.c_str());
 		// Exit emulator
 		dc_exit();
 	}
@@ -578,7 +578,7 @@ static void gui_display_commands()
     	DisabledScope scope(!savestateAllowed());
 
 		// Load State
-		if (ImGui::Button("Load State", ScaledVec2(110, 50)) && savestateAllowed())
+		if (ImGui::Button("加载存档", ScaledVec2(110, 50)) && savestateAllowed())
 		{
 			gui_setState(GuiState::Closed);
 			dc_loadstate(config::SavestateSlot);
@@ -586,14 +586,14 @@ static void gui_display_commands()
 		ImGui::SameLine();
 
 		// Slot #
-		std::string slot = "Slot " + std::to_string((int)config::SavestateSlot + 1);
+		std::string slot = "存档位 " + std::to_string((int)config::SavestateSlot + 1);
 		if (ImGui::Button(slot.c_str(), ImVec2(80 * settings.display.uiScale - ImGui::GetStyle().FramePadding.x, 50 * settings.display.uiScale)))
 			ImGui::OpenPopup("slot_select_popup");
 		if (ImGui::BeginPopup("slot_select_popup"))
 		{
 			for (int i = 0; i < 10; i++)
 				if (ImGui::Selectable(std::to_string(i + 1).c_str(), config::SavestateSlot == i, 0,
-						ImVec2(ImGui::CalcTextSize("Slot 8").x, 0))) {
+						ImVec2(ImGui::CalcTextSize("存档位 8").x, 0))) {
 					config::SavestateSlot = i;
 					SaveSettings();
 				}
@@ -602,7 +602,7 @@ static void gui_display_commands()
 		ImGui::SameLine();
 
 		// Save State
-		if (ImGui::Button("Save State", ScaledVec2(110, 50)) && savestateAllowed())
+		if (ImGui::Button("保存存档", ScaledVec2(110, 50)) && savestateAllowed())
 		{
 			gui_setState(GuiState::Closed);
 			dc_savestate(config::SavestateSlot);
@@ -612,12 +612,12 @@ static void gui_display_commands()
 	ImGui::Columns(2, "buttons", false);
 
 	// Settings
-	if (ImGui::Button("Settings", ScaledVec2(150, 50)))
+	if (ImGui::Button("设置", ScaledVec2(150, 50)))
 	{
 		gui_setState(GuiState::Settings);
 	}
 	ImGui::NextColumn();
-	if (ImGui::Button("Resume", ScaledVec2(150, 50)))
+	if (ImGui::Button("回到游戏", ScaledVec2(150, 50)))
 	{
 		GamepadDevice::load_system_mappings();
 		gui_setState(GuiState::Closed);
@@ -626,7 +626,7 @@ static void gui_display_commands()
 	ImGui::NextColumn();
 
 	// Insert/Eject Disk
-	const char *disk_label = libGDR_GetDiscType() == Open ? "Insert Disk" : "Eject Disk";
+	const char *disk_label = libGDR_GetDiscType() == Open ? "更换光盘" : "更换光盘";
 	if (ImGui::Button(disk_label, ScaledVec2(150, 50)))
 	{
 		if (libGDR_GetDiscType() == Open)
@@ -645,13 +645,13 @@ static void gui_display_commands()
 	{
 		DisabledScope scope(settings.network.online);
 
-		if (ImGui::Button("Cheats", ScaledVec2(150, 50)) && !settings.network.online)
+		if (ImGui::Button("金手指", ScaledVec2(150, 50)) && !settings.network.online)
 			gui_setState(GuiState::Cheats);
 	}
 	ImGui::Columns(1, nullptr, false);
 
 	// Exit
-	if (ImGui::Button(commandLineStart ? "Exit" : "Close Game", ScaledVec2(300, 50)
+	if (ImGui::Button(commandLineStart ? "退出" : "关闭游戏", ScaledVec2(300, 50)
 			+ ImVec2(ImGui::GetStyle().ColumnsMinSpacing + ImGui::GetStyle().FramePadding.x * 2 - 1, 0)))
 	{
 		gui_stop_game();
@@ -673,24 +673,24 @@ inline static void header(const char *title)
 
 const char *maple_device_types[] =
 {
-	"None",
-	"Sega Controller",
-	"Light Gun",
-	"Keyboard",
-	"Mouse",
-	"Twin Stick",
-	"Arcade/Ascii Stick",
-	"Maracas Controller",
-	"Fishing Controller",
-	"Pop'n Music controller",
-	"Racing Controller",
-	"Densha de Go! Controller",
+	"无",
+	"Sega 控制器",
+	"光枪",
+	"键盘",
+	"鼠标",
+	"双摇杆",
+	"街机/ASCII摇杆",
+	"Maracas 控制器",
+	"Fishing 控制器",
+	"Pop'n Music 控制器",
+	"Racing 控制器",
+	"Densha de Go! 控制器",
 //	"Dreameye",
 };
 
 const char *maple_expansion_device_types[] = 
 { 
-	"None",
+	"无",
 	"Sega VMU",
 	"Vibration Pack",
 	"Microphone",
@@ -788,11 +788,11 @@ struct Mapping {
 };
 
 const Mapping dcButtons[] = {
-	{ EMU_BTN_NONE, "Directions" },
-	{ DC_DPAD_UP, "Up" },
-	{ DC_DPAD_DOWN, "Down" },
-	{ DC_DPAD_LEFT, "Left" },
-	{ DC_DPAD_RIGHT, "Right" },
+	{ EMU_BTN_NONE, "十字键" },
+	{ DC_DPAD_UP, "上" },
+	{ DC_DPAD_DOWN, "下" },
+	{ DC_DPAD_LEFT, "左" },
+	{ DC_DPAD_RIGHT, "右" },
 
 	{ DC_AXIS_UP, "Thumbstick Up" },
 	{ DC_AXIS_DOWN, "Thumbstick Down" },
@@ -814,7 +814,7 @@ const Mapping dcButtons[] = {
 	{ DC_DPAD2_LEFT,  "DPad2 Left"  },
 	{ DC_DPAD2_RIGHT, "DPad2 Right" },
 
-	{ EMU_BTN_NONE, "Buttons" },
+	{ EMU_BTN_NONE, "按键" },
 	{ DC_BTN_A, "A" },
 	{ DC_BTN_B, "B" },
 	{ DC_BTN_X, "X" },
@@ -823,33 +823,33 @@ const Mapping dcButtons[] = {
 	{ DC_BTN_D, "D" },
 	{ DC_BTN_Z, "Z" },
 
-	{ EMU_BTN_NONE, "Triggers"      },
+	{ EMU_BTN_NONE, "肩键"      },
 	{ DC_AXIS_LT,   "Left Trigger"  },
 	{ DC_AXIS_RT,   "Right Trigger" },
 	{ DC_AXIS_LT2,   "Left Trigger 2" },
 	{ DC_AXIS_RT2,   "Right Trigger 2" },
 
-	{ EMU_BTN_NONE, "System Buttons" },
-	{ DC_BTN_START, "Start" },
-	{ DC_BTN_RELOAD, "Reload" },
+	{ EMU_BTN_NONE, "系统按键" },
+	{ DC_BTN_START, "开始" },
+	{ DC_BTN_RELOAD, "重载" },
 
-	{ EMU_BTN_NONE, "Emulator" },
-	{ EMU_BTN_MENU, "Menu" },
-	{ EMU_BTN_ESCAPE, "Exit" },
-	{ EMU_BTN_FFORWARD, "Fast-forward" },
-	{ EMU_BTN_LOADSTATE, "Load State" },
-	{ EMU_BTN_SAVESTATE, "Save State" },
-	{ EMU_BTN_BYPASS_KB, "Bypass Emulated Keyboard" },
+	{ EMU_BTN_NONE, "模拟器" },
+	{ EMU_BTN_MENU, "菜单" },
+	{ EMU_BTN_ESCAPE, "退出" },
+	{ EMU_BTN_FFORWARD, "快进" },
+	{ EMU_BTN_LOADSTATE, "加载存档" },
+	{ EMU_BTN_SAVESTATE, "保存存档" },
+	{ EMU_BTN_BYPASS_KB, "绕过模拟键盘" },
 
 	{ EMU_BTN_NONE, nullptr }
 };
 
 const Mapping arcadeButtons[] = {
-	{ EMU_BTN_NONE, "Directions" },
-	{ DC_DPAD_UP, "Up" },
-	{ DC_DPAD_DOWN, "Down" },
-	{ DC_DPAD_LEFT, "Left" },
-	{ DC_DPAD_RIGHT, "Right" },
+	{ EMU_BTN_NONE, "十字键" },
+	{ DC_DPAD_UP, "上" },
+	{ DC_DPAD_DOWN, "下" },
+	{ DC_DPAD_LEFT, "左" },
+	{ DC_DPAD_RIGHT, "右" },
 
 	{ DC_AXIS_UP, "Thumbstick Up" },
 	{ DC_AXIS_DOWN, "Thumbstick Down" },
@@ -861,38 +861,38 @@ const Mapping arcadeButtons[] = {
 	{ DC_AXIS2_LEFT, "R.Thumbstick Left" },
 	{ DC_AXIS2_RIGHT, "R.Thumbstick Right" },
 
-	{ EMU_BTN_NONE, "Buttons" },
-	{ DC_BTN_A, "Button 1" },
-	{ DC_BTN_B, "Button 2" },
-	{ DC_BTN_C, "Button 3" },
-	{ DC_BTN_X, "Button 4" },
-	{ DC_BTN_Y, "Button 5" },
-	{ DC_BTN_Z, "Button 6" },
-	{ DC_DPAD2_LEFT, "Button 7" },
-	{ DC_DPAD2_RIGHT, "Button 8" },
+	{ EMU_BTN_NONE, "按键" },
+	{ DC_BTN_A, "按键 1" },
+	{ DC_BTN_B, "按键 2" },
+	{ DC_BTN_C, "按键 3" },
+	{ DC_BTN_X, "按键 4" },
+	{ DC_BTN_Y, "按键 5" },
+	{ DC_BTN_Z, "按键 6" },
+	{ DC_DPAD2_LEFT, "按键 7" },
+	{ DC_DPAD2_RIGHT, "按键 8" },
 //	{ DC_DPAD2_RIGHT, "Button 9" }, // TODO
 
-	{ EMU_BTN_NONE, "Triggers" },
+	{ EMU_BTN_NONE, "肩键" },
 	{ DC_AXIS_LT, "Left Trigger" },
 	{ DC_AXIS_RT, "Right Trigger" },
 	{ DC_AXIS_LT2,   "Left Trigger 2" },
 	{ DC_AXIS_RT2,   "Right Trigger 2" },
 
-	{ EMU_BTN_NONE, "System Buttons" },
-	{ DC_BTN_START, "Start" },
-	{ DC_BTN_RELOAD, "Reload" },
-	{ DC_BTN_D, "Coin" },
-	{ DC_DPAD2_UP, "Service" },
-	{ DC_DPAD2_DOWN, "Test" },
-	{ DC_BTN_INSERT_CARD, "Insert Card" },
+	{ EMU_BTN_NONE, "系统按键" },
+	{ DC_BTN_START, "开始" },
+	{ DC_BTN_RELOAD, "重载" },
+	{ DC_BTN_D, "投币" },
+	{ DC_DPAD2_UP, "服务" },
+	{ DC_DPAD2_DOWN, "测试" },
+	{ DC_BTN_INSERT_CARD, "插卡" },
 
-	{ EMU_BTN_NONE, "Emulator" },
-	{ EMU_BTN_MENU, "Menu" },
-	{ EMU_BTN_ESCAPE, "Exit" },
-	{ EMU_BTN_FFORWARD, "Fast-forward" },
-	{ EMU_BTN_LOADSTATE, "Load State" },
-	{ EMU_BTN_SAVESTATE, "Save State" },
-	{ EMU_BTN_BYPASS_KB, "Bypass Emulated Keyboard" },
+	{ EMU_BTN_NONE, "模拟器" },
+	{ EMU_BTN_MENU, "菜单" },
+	{ EMU_BTN_ESCAPE, "退出" },
+	{ EMU_BTN_FFORWARD, "快进" },
+	{ EMU_BTN_LOADSTATE, "加载存档" },
+	{ EMU_BTN_SAVESTATE, "保存存档" },
+	{ EMU_BTN_BYPASS_KB, "绕过模拟键盘" },
 
 	{ EMU_BTN_NONE, nullptr }
 };
@@ -982,9 +982,9 @@ static void detect_input_popup(const Mapping *mapping)
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, padding);
 	if (ImGui::BeginPopupModal("Map Control", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
 	{
-		ImGui::Text("Waiting for control '%s'...", mapping->name);
+		ImGui::Text("等待连接控制器 '%s'...", mapping->name);
 		double now = os_GetSeconds();
-		ImGui::Text("Time out in %d s", (int)(5 - (now - map_start_time)));
+		ImGui::Text("超时 %d s", (int)(5 - (now - map_start_time)));
 		if (mapped_code != (u32)-1)
 		{
 			std::shared_ptr<InputMapping> input_mapping = mapped_device->get_input_mapping();
@@ -1049,13 +1049,13 @@ static void controller_mapping_popup(const std::shared_ptr<GamepadDevice>& gamep
 {
 	fullScreenWindow(true);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0);
-	if (ImGui::BeginPopupModal("Controller Mapping", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+	if (ImGui::BeginPopupModal("按键映射", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
 	{
 		const ImGuiStyle& style = ImGui::GetStyle();
 		const float winWidth = ImGui::GetIO().DisplaySize.x - insetLeft - insetRight - (style.WindowBorderSize + style.WindowPadding.x) * 2;
 		const float col_width = (winWidth - style.GrabMinSize - style.ItemSpacing.x
-				- (ImGui::CalcTextSize("Map").x + style.FramePadding.x * 2.0f + style.ItemSpacing.x)
-				- (ImGui::CalcTextSize("Unmap").x + style.FramePadding.x * 2.0f + style.ItemSpacing.x)) / 2;
+				- (ImGui::CalcTextSize("映射").x + style.FramePadding.x * 2.0f + style.ItemSpacing.x)
+				- (ImGui::CalcTextSize("解除映射").x + style.FramePadding.x * 2.0f + style.ItemSpacing.x)) / 2;
 		const float scaling = settings.display.uiScale;
 
 		static int map_system;
@@ -1081,7 +1081,7 @@ static void controller_mapping_popup(const std::shared_ptr<GamepadDevice>& gamep
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x, (30 * scaling - ImGui::GetFontSize()) / 2));
 			portWidth = ImGui::CalcTextSize("AA").x + ImGui::GetStyle().ItemSpacing.x * 2.0f + ImGui::GetFontSize();
 			ImGui::SetNextItemWidth(portWidth);
-			if (ImGui::BeginCombo("Port", maple_ports[gamepad_port + 1]))
+			if (ImGui::BeginCombo("端口", maple_ports[gamepad_port + 1]))
 			{
 				for (u32 j = 0; j < MAPLE_PORTS; j++)
 				{
@@ -1096,10 +1096,10 @@ static void controller_mapping_popup(const std::shared_ptr<GamepadDevice>& gamep
 			portWidth += ImGui::CalcTextSize("Port").x + ImGui::GetStyle().ItemSpacing.x + ImGui::GetStyle().FramePadding.x;
 			ImGui::PopStyleVar();
 		}
-		float comboWidth = ImGui::CalcTextSize("Dreamcast Controls").x + ImGui::GetStyle().ItemSpacing.x + ImGui::GetFontSize() + ImGui::GetStyle().FramePadding.x * 4;
+		float comboWidth = ImGui::CalcTextSize("Dreamcast 控制器").x + ImGui::GetStyle().ItemSpacing.x + ImGui::GetFontSize() + ImGui::GetStyle().FramePadding.x * 4;
 		float gameConfigWidth = 0;
 		if (!settings.content.gameId.empty())
-			gameConfigWidth = ImGui::CalcTextSize(gamepad->isPerGameMapping() ? "Delete Game Config" : "Make Game Config").x + ImGui::GetStyle().ItemSpacing.x + ImGui::GetStyle().FramePadding.x * 2;
+			gameConfigWidth = ImGui::CalcTextSize(gamepad->isPerGameMapping() ? "删除游戏配置" : "生成游戏配置").x + ImGui::GetStyle().ItemSpacing.x + ImGui::GetStyle().FramePadding.x * 2;
 		ImGui::SameLine(0, ImGui::GetContentRegionAvail().x - comboWidth - gameConfigWidth - ImGui::GetStyle().ItemSpacing.x - 100 * scaling * 2 - portWidth);
 
 		ImGui::AlignTextToFramePadding();
@@ -1108,7 +1108,7 @@ static void controller_mapping_popup(const std::shared_ptr<GamepadDevice>& gamep
 		{
 			if (gamepad->isPerGameMapping())
 			{
-				if (ImGui::Button("Delete Game Config", ScaledVec2(0, 30)))
+				if (ImGui::Button("删除游戏配置", ScaledVec2(0, 30)))
 				{
 					gamepad->setPerGameMapping(false);
 					if (!gamepad->find_mapping(map_system))
@@ -1117,39 +1117,39 @@ static void controller_mapping_popup(const std::shared_ptr<GamepadDevice>& gamep
 			}
 			else
 			{
-				if (ImGui::Button("Make Game Config", ScaledVec2(0, 30)))
+				if (ImGui::Button("生成游戏配置", ScaledVec2(0, 30)))
 					gamepad->setPerGameMapping(true);
 			}
 			ImGui::SameLine();
 		}
-		if (ImGui::Button("Reset...", ScaledVec2(100, 30)))
-			ImGui::OpenPopup("Confirm Reset");
+		if (ImGui::Button("重置中……", ScaledVec2(100, 30)))
+			ImGui::OpenPopup("确认重置");
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ScaledVec2(20, 20));
-		if (ImGui::BeginPopupModal("Confirm Reset", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
+		if (ImGui::BeginPopupModal("确认重置", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
 		{
-			ImGui::Text("Are you sure you want to reset the mappings to default?");
+			ImGui::Text("你确定要将映射重置为默认设置吗？");
 			static bool hitbox;
 			if (arcade_button_mode)
 			{
-				ImGui::Text("Controller Type:");
-				if (ImGui::RadioButton("Gamepad", !hitbox))
+				ImGui::Text("控制器类型:");
+				if (ImGui::RadioButton("游戏手柄", !hitbox))
 					hitbox = false;
 				ImGui::SameLine();
-				if (ImGui::RadioButton("Arcade / Hit Box", hitbox))
+				if (ImGui::RadioButton("街机 / Hit Box", hitbox))
 					hitbox = true;
 			}
 			ImGui::NewLine();
 			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(20 * scaling, ImGui::GetStyle().ItemSpacing.y));
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ScaledVec2(10, 10));
-			if (ImGui::Button("Yes"))
+			if (ImGui::Button("是"))
 			{
 				gamepad->resetMappingToDefault(arcade_button_mode, !hitbox);
 				gamepad->save_mapping(map_system);
 				ImGui::CloseCurrentPopup();
 			}
 			ImGui::SameLine();
-			if (ImGui::Button("No"))
+			if (ImGui::Button("否"))
 				ImGui::CloseCurrentPopup();
 			ImGui::PopStyleVar(2);
 
@@ -1159,7 +1159,7 @@ static void controller_mapping_popup(const std::shared_ptr<GamepadDevice>& gamep
 
 		ImGui::SameLine();
 
-		const char* items[] = { "Dreamcast Controls", "Arcade Controls" };
+		const char* items[] = { "Dreamcast 控制器", "街机控制器" };
 
 		if (last_item_current_map_idx == 2 && game_started)
 			// Select the right mappings for the current game
@@ -1237,7 +1237,7 @@ static void controller_mapping_popup(const std::shared_ptr<GamepadDevice>& gamep
 			if (ImGui::Button("Map"))
 			{
 				map_start_time = os_GetSeconds();
-				ImGui::OpenPopup("Map Control");
+				ImGui::OpenPopup("映射控制器");
 				mapped_device = gamepad;
 				mapped_code = -1;
 				gamepad->detectButtonOrAxisInput([](u32 code, bool analog, bool positive)
@@ -1249,7 +1249,7 @@ static void controller_mapping_popup(const std::shared_ptr<GamepadDevice>& gamep
 			}
 			detect_input_popup(systemMapping);
 			ImGui::SameLine();
-			if (ImGui::Button("Unmap"))
+			if (ImGui::Button("取消映射"))
 			{
 				input_mapping = gamepad->get_input_mapping();
 				unmapControl(input_mapping, gamepad_port, systemMapping->key);
@@ -1274,7 +1274,7 @@ static void gamepadSettingsPopup(const std::shared_ptr<GamepadDevice>& gamepad)
 	ImGui::SetNextWindowSize(min(ImGui::GetIO().DisplaySize, ScaledVec2(450.f, 300.f)));
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0);
-	if (ImGui::BeginPopupModal("Gamepad Settings", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+	if (ImGui::BeginPopupModal("游戏手柄设置", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
 	{
 		if (ImGui::Button("完成", ScaledVec2(100, 30)))
 		{
@@ -1345,8 +1345,8 @@ static void gamepadSettingsPopup(const std::shared_ptr<GamepadDevice>& gamepad)
 			if (ImGui::SliderInt("Saturation", &saturation, 50, 200, "%d%%"))
 				gamepad->set_saturation(saturation / 100.f);
 			ImGui::SameLine();
-			ShowHelpMarker("Value sent to the game at 100% thumbstick deflection. "
-					"Values greater than 100% will saturate before full deflection of the thumbstick.");
+			ShowHelpMarker("在拇指摇杆完全偏转（偏移到最大角度）时发送给游戏的值 "
+					"在拇指摇杆完全偏转之前，大于100%的值会达到饱和");
 		}
 
 		ImGui::EndPopup();
@@ -1361,15 +1361,15 @@ void error_popup()
 		ImVec2 padding = ScaledVec2(20, 20);
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, padding);
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, padding);
-		ImGui::OpenPopup("Error");
-		if (ImGui::BeginPopupModal("Error", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar))
+		ImGui::OpenPopup("错误");
+		if (ImGui::BeginPopupModal("错误", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar))
 		{
 			ImGui::PushTextWrapPos(ImGui::GetCursorPos().x + 400.f * settings.display.uiScale);
 			ImGui::TextWrapped("%s", error_msg.c_str());
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ScaledVec2(16, 3));
 			float currentwidth = ImGui::GetContentRegionAvail().x;
 			ImGui::SetCursorPosX((currentwidth - 80.f * settings.display.uiScale) / 2.f + ImGui::GetStyle().WindowPadding.x);
-			if (ImGui::Button("OK", ScaledVec2(80.f, 0)))
+			if (ImGui::Button("好", ScaledVec2(80.f, 0)))
 			{
 				error_msg.clear();
 				ImGui::CloseCurrentPopup();
@@ -1391,15 +1391,15 @@ static void contentpath_warning_popup()
 
     if (scanner.content_path_looks_incorrect)
     {
-        ImGui::OpenPopup("Incorrect Content Location?");
-        if (ImGui::BeginPopupModal("Incorrect Content Location?", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
+        ImGui::OpenPopup("内容位置不正确？");
+        if (ImGui::BeginPopupModal("内容位置不正确？", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
         {
             ImGui::PushTextWrapPos(ImGui::GetCursorPos().x + 400.f * settings.display.uiScale);
-            ImGui::TextWrapped("  Scanned %d folders but no game can be found!  ", scanner.empty_folders_scanned);
+            ImGui::TextWrapped("  扫描了 %d 个文件夹，但未找到任何游戏！  ", scanner.empty_folders_scanned);
             ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ScaledVec2(16, 3));
             float currentwidth = ImGui::GetContentRegionAvail().x;
             ImGui::SetCursorPosX((currentwidth - 100.f * settings.display.uiScale) / 2.f + ImGui::GetStyle().WindowPadding.x - 55.f * settings.display.uiScale);
-            if (ImGui::Button("Reselect", ScaledVec2(100.f, 0)))
+            if (ImGui::Button("重选", ScaledVec2(100.f, 0)))
             {
             	scanner.content_path_looks_incorrect = false;
                 ImGui::CloseCurrentPopup();
@@ -1408,7 +1408,7 @@ static void contentpath_warning_popup()
 
             ImGui::SameLine();
             ImGui::SetCursorPosX((currentwidth - 100.f * settings.display.uiScale) / 2.f + ImGui::GetStyle().WindowPadding.x + 55.f * settings.display.uiScale);
-            if (ImGui::Button("Cancel", ScaledVec2(100.f, 0)))
+            if (ImGui::Button("取消", ScaledVec2(100.f, 0)))
             {
             	scanner.content_path_looks_incorrect = false;
                 ImGui::CloseCurrentPopup();
@@ -1423,8 +1423,8 @@ static void contentpath_warning_popup()
     if (show_contentpath_selection)
     {
         scanner.stop();
-        ImGui::OpenPopup("Select Directory");
-        select_file_popup("Select Directory", [](bool cancelled, std::string selection)
+        ImGui::OpenPopup("选择目录");
+        select_file_popup("选择目录", [](bool cancelled, std::string selection)
         {
             show_contentpath_selection = false;
             if (!cancelled)
@@ -1440,11 +1440,11 @@ static void contentpath_warning_popup()
 
 static inline void gui_debug_tab()
 {
-	if (ImGui::BeginTabItem("Debug"))
+	if (ImGui::BeginTabItem("调试"))
 	{
 		ImVec2 normal_padding = ImGui::GetStyle().FramePadding;
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, normal_padding);
-	    header("Logging");
+	    header("记录中");
 	    {
 	    	LogManager *logManager = LogManager::GetInstance();
 	    	for (LogTypes::LOG_TYPE type = LogTypes::AICA; type < LogTypes::NUMBER_OF_LOGS; type = (LogTypes::LOG_TYPE)(type + 1))
@@ -1479,14 +1479,14 @@ static inline void gui_debug_tab()
 	    header("Profiling");
 	    {
 
-			OptionCheckbox("Enable", config::ProfilerEnabled, "Enable the profiler.");
+			OptionCheckbox("启用", config::ProfilerEnabled, "启用性能分析器");
 			if (!config::ProfilerEnabled)
 			{
 				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 				ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
 			}
-			OptionCheckbox("Display", config::ProfilerDrawToGUI, "Draw the profiler output in an overlay.");
-			OptionCheckbox("Output to terminal", config::ProfilerOutputTTY, "Write the profiler output to the terminal");
+			OptionCheckbox("显示", config::ProfilerDrawToGUI, "将性能分析器的输出以叠加层的形式绘制出来");
+			OptionCheckbox("输出到终端", config::ProfilerOutputTTY, "将性能分析器的输出写入终端");
 			// TODO frame warning time
 			if (!config::ProfilerEnabled)
 			{
@@ -1522,7 +1522,7 @@ static void gui_display_settings()
 	fullScreenWindow(false);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0);
 
-    ImGui::Begin("Settings", NULL, ImGuiWindowFlags_DragScrolling | ImGuiWindowFlags_NoResize
+    ImGui::Begin("设置", NULL, ImGuiWindowFlags_DragScrolling | ImGuiWindowFlags_NoResize
     		| ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
 	ImVec2 normal_padding = ImGui::GetStyle().FramePadding;
 
@@ -1554,7 +1554,7 @@ static void gui_display_settings()
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(16 * settings.display.uiScale, normal_padding.y));
 		if (config::Settings::instance().hasPerGameConfig())
 		{
-			if (ImGui::Button("Delete Game Config", ScaledVec2(0, 30)))
+			if (ImGui::Button("删除游戏配置", ScaledVec2(0, 30)))
 			{
 				config::Settings::instance().setPerGameConfig(false);
 				config::Settings::instance().load(false);
@@ -1563,7 +1563,7 @@ static void gui_display_settings()
 		}
 		else
 		{
-			if (ImGui::Button("Make Game Config", ScaledVec2(0, 30)))
+			if (ImGui::Button("生成游戏配置", ScaledVec2(0, 30)))
 				config::Settings::instance().setPerGameConfig(true);
 		}
 	    ImGui::PopStyleVar();
@@ -1580,11 +1580,11 @@ static void gui_display_settings()
 				DisabledScope scope(settings.platform.isArcade());
 
 				const char *languages[] = { "日语", "英语", "德语", "法语", "西班牙语", "意大利语", "默认" };
-				OptionComboBox("Language", config::Language, languages, std::size(languages),
+				OptionComboBox("语言", config::Language, languages, std::size(languages),
 					"在Dreamcast BIOS中配置语言");
 
 				const char *broadcast[] = { "NTSC", "PAL", "PAL/M", "PAL/N", "默认" };
-				OptionComboBox("Broadcast", config::Broadcast, broadcast, std::size(broadcast),
+				OptionComboBox("制式", config::Broadcast, broadcast, std::size(broadcast),
 						"非VGA模式的电视广播标准");
 			}
 
@@ -2318,21 +2318,21 @@ static void gui_display_settings()
 #ifdef _WIN32
 				DisabledScope scope(!((renderApi == 0) || (renderApi == 3)));
 #endif
-				OptionCheckbox("Send video content to another program", config::VideoRouting,
-					"e.g. Route GPU texture to OBS Studio directly instead of using CPU intensive Display/Window Capture");
+				OptionCheckbox("将视频内容发送到另一个程序", config::VideoRouting,
+					"例如，直接将 GPU 纹理路由到 OBS Studio，而不是使用对 CPU 要求较高的显示/窗口捕获");
 
 				{
 					DisabledScope scope(!config::VideoRouting);
-					OptionCheckbox("Scale down before sending", config::VideoRoutingScale, "Could increase performance when sharing a smaller texture, YMMV");
+					OptionCheckbox("发送前缩小规模", config::VideoRoutingScale, "共享较小的纹理时可能提升性能，效果因情况而异");
 					{
 						DisabledScope scope(!config::VideoRoutingScale);
 						static int vres = config::VideoRoutingVRes;
-						if (ImGui::InputInt("Output vertical resolution", &vres))
+						if (ImGui::InputInt("输出垂直分辨率", &vres))
 						{
 							config::VideoRoutingVRes = vres;
 						}
 					}
-					ImGui::Text("Output texture size: %d x %d", config::VideoRoutingScale ? config::VideoRoutingVRes * settings.display.width / settings.display.height : settings.display.width, config::VideoRoutingScale ? config::VideoRoutingVRes : settings.display.height);
+					ImGui::Text("输出纹理大小: %d x %d", config::VideoRoutingScale ? config::VideoRoutingVRes * settings.display.width / settings.display.height : settings.display.width, config::VideoRoutingScale ? config::VideoRoutingVRes : settings.display.height);
 				}
 			}
 #endif
@@ -2524,74 +2524,74 @@ static void gui_display_settings()
 				if (config::GGPOEnable)
 				{
 					config::NetworkEnable = false;
-					OptionCheckbox("Play as Player 1", config::ActAsServer,
-							"Deselect to play as player 2");
+					OptionCheckbox("以玩家1的身份进行游戏", config::ActAsServer,
+							"取消选择将以玩家2的身份进行游戏");
 					char server_name[256];
 					strcpy(server_name, config::NetworkServer.get().c_str());
-					ImGui::InputText("Peer", server_name, sizeof(server_name), ImGuiInputTextFlags_CharsNoBlank, nullptr, nullptr);
+					ImGui::InputText("对等", server_name, sizeof(server_name), ImGuiInputTextFlags_CharsNoBlank, nullptr, nullptr);
 					ImGui::SameLine();
-					ShowHelpMarker("Your peer IP address and optional port");
+					ShowHelpMarker("您的对等IP地址和可选端口");
 					config::NetworkServer.set(server_name);
-					OptionSlider("Frame Delay", config::GGPODelay, 0, 20,
-						"Sets Frame Delay, advisable for sessions with ping >100 ms");
+					OptionSlider("帧延迟", config::GGPODelay, 0, 20,
+						"设置帧延迟，对于ping值大于100毫秒的会话来说，这是建议的做法");
 
-					ImGui::Text("Left Thumbstick:");
-					OptionRadioButton<int>("Disabled", config::GGPOAnalogAxes, 0, "Left thumbstick not used");
+					ImGui::Text("左拇指摇杆:");
+					OptionRadioButton<int>("禁用", config::GGPOAnalogAxes, 0, "不使用左拇指摇杆");
 					ImGui::SameLine();
-					OptionRadioButton<int>("Horizontal", config::GGPOAnalogAxes, 1, "Use the left thumbstick horizontal axis only");
+					OptionRadioButton<int>("水平轴", config::GGPOAnalogAxes, 1, "仅使用左拇指摇杆的水平轴");
 					ImGui::SameLine();
-					OptionRadioButton<int>("Full", config::GGPOAnalogAxes, 2, "Use the left thumbstick horizontal and vertical axes");
+					OptionRadioButton<int>("水平+垂直", config::GGPOAnalogAxes, 2, "使用左拇指摇杆的水平轴和垂直轴");
 
-					OptionCheckbox("Enable Chat", config::GGPOChat, "Open the chat window when a chat message is received");
+					OptionCheckbox("启用聊天", config::GGPOChat, "当收到聊天消息时打开聊天窗口");
 					if (config::GGPOChat)
 					{
-						OptionCheckbox("Enable Chat Window Timeout", config::GGPOChatTimeoutToggle, "Automatically close chat window after 20 seconds");
+						OptionCheckbox("启用聊天窗口超时", config::GGPOChatTimeoutToggle, "20秒后自动关闭聊天窗口");
 						if (config::GGPOChatTimeoutToggle)
 						{
 							char chatTimeout[256];
 							sprintf(chatTimeout, "%d", (int)config::GGPOChatTimeout);
-							ImGui::InputText("Chat Window Timeout (seconds)", chatTimeout, sizeof(chatTimeout), ImGuiInputTextFlags_CharsDecimal, nullptr, nullptr);
+							ImGui::InputText("聊天窗口超时 (秒)", chatTimeout, sizeof(chatTimeout), ImGuiInputTextFlags_CharsDecimal, nullptr, nullptr);
 							ImGui::SameLine();
-							ShowHelpMarker("Sets duration that chat window stays open after new message is received.");
+							ShowHelpMarker("设置接收到新消息后聊天窗口保持打开的时间");
 							config::GGPOChatTimeout.set(atoi(chatTimeout));
 						}
 					}
-					OptionCheckbox("Network Statistics", config::NetworkStats,
-							"Display network statistics on screen");
+					OptionCheckbox("网络统计", config::NetworkStats,
+							"在屏幕上显示网络统计信息");
 				}
 				else if (config::NetworkEnable)
 				{
-					OptionCheckbox("Act as Server", config::ActAsServer,
-							"Create a local server for Naomi network games");
+					OptionCheckbox("创建本地服务器", config::ActAsServer,
+							"创建一个用于Naomi网络游戏的本地服务器");
 					if (!config::ActAsServer)
 					{
 						char server_name[256];
 						strcpy(server_name, config::NetworkServer.get().c_str());
-						ImGui::InputText("Server", server_name, sizeof(server_name), ImGuiInputTextFlags_CharsNoBlank, nullptr, nullptr);
+						ImGui::InputText("服务", server_name, sizeof(server_name), ImGuiInputTextFlags_CharsNoBlank, nullptr, nullptr);
 						ImGui::SameLine();
-						ShowHelpMarker("The server to connect to. Leave blank to find a server automatically on the default port");
+						ShowHelpMarker("要连接的服务器。留空则会在默认端口上自动查找服务器");
 						config::NetworkServer.set(server_name);
 					}
 					char localPort[256];
 					sprintf(localPort, "%d", (int)config::LocalPort);
-					ImGui::InputText("Local Port", localPort, sizeof(localPort), ImGuiInputTextFlags_CharsDecimal, nullptr, nullptr);
+					ImGui::InputText("本地端口", localPort, sizeof(localPort), ImGuiInputTextFlags_CharsDecimal, nullptr, nullptr);
 					ImGui::SameLine();
-					ShowHelpMarker("The local UDP port to use");
+					ShowHelpMarker("使用的本地UDP端口");
 					config::LocalPort.set(atoi(localPort));
 				}
 				else if (config::BattleCableEnable)
 				{
 					char server_name[256];
 					strcpy(server_name, config::NetworkServer.get().c_str());
-					ImGui::InputText("Peer", server_name, sizeof(server_name), ImGuiInputTextFlags_CharsNoBlank, nullptr, nullptr);
+					ImGui::InputText("对等", server_name, sizeof(server_name), ImGuiInputTextFlags_CharsNoBlank, nullptr, nullptr);
 					ImGui::SameLine();
-					ShowHelpMarker("The peer to connect to. Leave blank to find a player automatically on the default port");
+					ShowHelpMarker("要连接的对等方。留空以在默认端口上自动查找玩家");
 					config::NetworkServer.set(server_name);
 					char localPort[256];
 					sprintf(localPort, "%d", (int)config::LocalPort);
-					ImGui::InputText("Local Port", localPort, sizeof(localPort), ImGuiInputTextFlags_CharsDecimal, nullptr, nullptr);
+					ImGui::InputText("本地端口", localPort, sizeof(localPort), ImGuiInputTextFlags_CharsDecimal, nullptr, nullptr);
 					ImGui::SameLine();
-					ShowHelpMarker("The local UDP port to use");
+					ShowHelpMarker("使用的本地UDP端口");
 					config::LocalPort.set(atoi(localPort));
 				}
 			}
@@ -2610,12 +2610,12 @@ static void gui_display_settings()
 			}
 #ifdef NAOMI_MULTIBOARD
 			ImGui::Spacing();
-			header("Multiboard Screens");
+			header("多屏幕");
 			{
 				//OptionRadioButton<int>("Disabled", config::MultiboardSlaves, 0, "Multiboard disabled (when optional)");
-				OptionRadioButton<int>("1 (Twin)", config::MultiboardSlaves, 1, "One screen configuration (F355 Twin)");
+				OptionRadioButton<int>("1 (Twin)", config::MultiboardSlaves, 1, "一种屏幕配置（F355 双屏）");
 				ImGui::SameLine();
-				OptionRadioButton<int>("3 (Deluxe)", config::MultiboardSlaves, 2, "Three screens configuration");
+				OptionRadioButton<int>("3 (Deluxe)", config::MultiboardSlaves, 2, "三种屏幕配置");
 			}
 #endif
 			ImGui::PopStyleVar();
@@ -2668,22 +2668,22 @@ static void gui_display_settings()
 	            ImGui::SameLine();
 	            ShowHelpMarker("将调试信息记录到flycast.log文件中");
 #ifdef SENTRY_UPLOAD
-	            OptionCheckbox("Automatically Report Crashes", config::UploadCrashLogs,
-	            		"Automatically upload crash reports to sentry.io to help in troubleshooting. No personal information is included.");
+	            OptionCheckbox("自动报告崩溃", config::UploadCrashLogs,
+	            		"自动上传崩溃报告至sentry.io以协助故障排查。不包含个人信息。");
 #endif
 		    }
 			ImGui::PopStyleVar();
 			ImGui::EndTabItem();
 
 			#ifdef USE_LUA
-			header("Lua Scripting");
+			header("Lua 脚本编写");
 			{
 				char LuaFileName[256];
 
 				strcpy(LuaFileName, config::LuaFileName.get().c_str());
-				ImGui::InputText("Lua Filename", LuaFileName, sizeof(LuaFileName), ImGuiInputTextFlags_CharsNoBlank, nullptr, nullptr);
+				ImGui::InputText("Lua 文件名", LuaFileName, sizeof(LuaFileName), ImGuiInputTextFlags_CharsNoBlank, nullptr, nullptr);
 				ImGui::SameLine();
-				ShowHelpMarker("Specify lua filename to use. Should be located in Flycast config directory. Defaults to flycast.lua when empty.");
+				ShowHelpMarker("指定要使用的Lua文件名。该文件应位于Flycast配置目录中。当留空时，默认使用flycast.lua");
 				config::LuaFileName = LuaFileName;
 
 			}
@@ -2699,7 +2699,7 @@ static void gui_display_settings()
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, normal_padding);
 		    header("Flycast");
 		    {
-				ImGui::Text("Version: %s", GIT_VERSION);
+				ImGui::Text("版本号: %s", GIT_VERSION);
 				ImGui::Text("Git Hash: %s", GIT_HASH);
 				ImGui::Text("构建日期: %s", BUILD_DATE);
 		    }
@@ -2720,7 +2720,7 @@ static void gui_display_settings()
 #elif HOST_CPU == CPU_ARM64
 					"ARM64"
 #else
-					"Unknown"
+					"未知"
 #endif
 						);
 		    	ImGui::Text("操作系统: %s",
@@ -2741,7 +2741,7 @@ static void gui_display_settings()
 #elif defined(__SWITCH__)
 					"Switch"
 #else
-					"Unknown"
+					"未知"
 #endif
 						);
 #ifdef TARGET_IPHONE

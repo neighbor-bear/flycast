@@ -163,7 +163,7 @@ void ExecuteDelayslot_RTE()
 		// And execute
 		ExecuteOpcode(op);
 	} catch (const SH4ThrownException&) {
-		throw FlycastException("Fatal: SH4 exception in RTE delay slot");
+		throw FlycastException("致命错误：在RTE延迟槽中发生SH4异常");
 	} catch (const debugger::Stop& e) {
 		next_pc -= 2;	// break on previous instruction
 		throw e;

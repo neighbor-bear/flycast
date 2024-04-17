@@ -2218,7 +2218,7 @@ public:
 			} while (restarting);
 		} catch (const SH4ThrownException&) {
 			ERROR_LOG(DYNAREC, "SH4ThrownException in mainloop");
-			throw FlycastException("Fatal: Unhandled SH4 exception");
+			throw FlycastException("致命错误：未处理的SH4异常");
 		}
 	}
 
