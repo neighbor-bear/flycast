@@ -575,12 +575,12 @@ void gui_stop_game(const std::string& message)
 		gui_setState(GuiState::Main);
 		reset_vmus();
 		if (!message.empty())
-			gui_error("Flycast has stopped.\n\n" + message);
+			gui_error("Flycast已停止工作。\n\n" + message);
 	}
 	else
 	{
 		if (!message.empty())
-			ERROR_LOG(COMMON, "Flycast has stopped: %s", message.c_str());
+			ERROR_LOG(COMMON, "Flycast已停止工作: %s", message.c_str());
 		// Exit emulator
 		dc_exit();
 	}
@@ -681,7 +681,7 @@ static void gui_display_commands()
 		ImguiStyleVar _1{ImGuiStyleVar_FramePadding, ScaledVec2(12.f, 3.f)};
 
 		// Resume
-		if (ImGui::Button(ICON_FA_PLAY "  Resume", ScaledVec2(buttonWidth, 50)))
+		if (ImGui::Button(ICON_FA_PLAY "  恢复游戏", ScaledVec2(buttonWidth, 50)))
 		{
 			GamepadDevice::load_system_mappings();
 			gui_setState(GuiState::Closed);
@@ -690,14 +690,14 @@ static void gui_display_commands()
 		{
 			DisabledScope _{settings.network.online || settings.raHardcoreMode};
 
-			if (ImGui::Button(ICON_FA_MASK "  Cheats", ScaledVec2(buttonWidth, 50)) && !settings.network.online)
+			if (ImGui::Button(ICON_FA_MASK "  金手指", ScaledVec2(buttonWidth, 50)) && !settings.network.online)
 				gui_setState(GuiState::Cheats);
 		}
 		// Achievements
 		{
 			DisabledScope _{!achievements::isActive()};
 
-			if (ImGui::Button(ICON_FA_TROPHY "  Achievements", ScaledVec2(buttonWidth, 50)) && achievements::isActive())
+			if (ImGui::Button(ICON_FA_TROPHY "  成就", ScaledVec2(buttonWidth, 50)) && achievements::isActive())
 				gui_setState(GuiState::Achievements);
 		}
 		// Barcode
@@ -714,7 +714,7 @@ static void gui_display_commands()
 		ImGui::NextColumn();
 
 		// Insert/Eject Disk
-		const char *disk_label = gdr::isOpen() ? ICON_FA_COMPACT_DISC "  Insert Disk" : ICON_FA_COMPACT_DISC "  Eject Disk";
+		const char *disk_label = gdr::isOpen() ? ICON_FA_COMPACT_DISC "  插入光盘" : ICON_FA_COMPACT_DISC "  弹出光盘";
 		if (ImGui::Button(disk_label, ScaledVec2(buttonWidth, 50)))
 		{
 			if (gdr::isOpen()) {
@@ -726,11 +726,11 @@ static void gui_display_commands()
 			}
 		}
 		// Settings
-		if (ImGui::Button(ICON_FA_GEAR "  Settings", ScaledVec2(buttonWidth, 50)))
+		if (ImGui::Button(ICON_FA_GEAR "  设置", ScaledVec2(buttonWidth, 50)))
 			gui_setState(GuiState::Settings);
 
 		// Exit
-		if (ImGui::Button(commandLineStart ? ICON_FA_POWER_OFF "  Exit" : ICON_FA_POWER_OFF "  Close Game", ScaledVec2(buttonWidth, 50)))
+		if (ImGui::Button(commandLineStart ? ICON_FA_POWER_OFF "  Exit" : ICON_FA_POWER_OFF "  关闭游戏", ScaledVec2(buttonWidth, 50)))
 			gui_stop_game();
 
 		ImGui::NextColumn();
@@ -750,7 +750,7 @@ static void gui_display_commands()
 			}
 
 			// Save State
-			if (ImGui::Button(ICON_FA_DOWNLOAD "  Save State", ScaledVec2(buttonWidth, 50)) && savestateAllowed())
+			if (ImGui::Button(ICON_FA_DOWNLOAD "  保存状态", ScaledVec2(buttonWidth, 50)) && savestateAllowed())
 			{
 				gui_setState(GuiState::Closed);
 				savestate();
@@ -765,7 +765,7 @@ static void gui_display_commands()
 					config::SavestateSlot--;
 				SaveSettings();
 			}
-			std::string slot = "Slot " + std::to_string((int)config::SavestateSlot + 1);
+			std::string slot = "存档位 " + std::to_string((int)config::SavestateSlot + 1);
 			float spacingW = (uiScaled(buttonWidth) - ImGui::GetFrameHeight() * 2 - ImGui::CalcTextSize(slot.c_str()).x) / 2;
 			ImGui::SameLine(0, spacingW);
 			ImGui::Text("%s", slot.c_str());
@@ -781,7 +781,7 @@ static void gui_display_commands()
 			{
 				ImVec4 gray(0.75f, 0.75f, 0.75f, 1.f);
 				if (savestateDate == 0)
-					ImGui::TextColored(gray, "Empty");
+					ImGui::TextColored(gray, "空");
 				else
 					ImGui::TextColored(gray, "%s", timeToISO8601(savestateDate).c_str());
 			}
@@ -1118,9 +1118,9 @@ static void detect_input_popup(const Mapping *mapping)
 	ImVec2 padding = ScaledVec2(20, 20);
 	ImguiStyleVar _(ImGuiStyleVar_WindowPadding, padding);
 	ImguiStyleVar _1(ImGuiStyleVar_ItemSpacing, padding);
-	if (ImGui::BeginPopupModal("Map Control", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
+	if (ImGui::BeginPopupModal("按键映射", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
 	{
-		ImGui::Text("Waiting for control '%s'...", mapping->name);
+		ImGui::Text("等待控制器 '%s'...", mapping->name);
 		u64 now = getTimeMs();
 		ImGui::Text("Time out in %d s", (int)(5 - (now - map_start_time) / 1000));
 		if (mapped_code != (u32)-1)
@@ -1186,20 +1186,20 @@ static void controller_mapping_popup(const std::shared_ptr<GamepadDevice>& gamep
 {
 	fullScreenWindow(true);
 	ImguiStyleVar _(ImGuiStyleVar_WindowRounding, 0);
-	if (ImGui::BeginPopupModal("Controller Mapping", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+	if (ImGui::BeginPopupModal("控制器映射", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
 	{
 		const ImGuiStyle& style = ImGui::GetStyle();
 		const float winWidth = ImGui::GetIO().DisplaySize.x - insetLeft - insetRight - (style.WindowBorderSize + style.WindowPadding.x) * 2;
 		const float col_width = (winWidth - style.GrabMinSize - style.ItemSpacing.x
-				- (ImGui::CalcTextSize("Map").x + style.FramePadding.x * 2.0f + style.ItemSpacing.x)
-				- (ImGui::CalcTextSize("Unmap").x + style.FramePadding.x * 2.0f + style.ItemSpacing.x)) / 2;
+				- (ImGui::CalcTextSize("映射").x + style.FramePadding.x * 2.0f + style.ItemSpacing.x)
+				- (ImGui::CalcTextSize("取消映射").x + style.FramePadding.x * 2.0f + style.ItemSpacing.x)) / 2;
 
 		static int map_system;
 		static int item_current_map_idx = 0;
 		static int last_item_current_map_idx = 2;
 
 		std::shared_ptr<InputMapping> input_mapping = gamepad->get_input_mapping();
-		if (input_mapping == NULL || ImGui::Button("Done", ScaledVec2(100, 30)))
+		if (input_mapping == NULL || ImGui::Button("完成", ScaledVec2(100, 30)))
 		{
 			ImGui::CloseCurrentPopup();
 			gamepad->save_mapping(map_system);
@@ -1230,10 +1230,10 @@ static void controller_mapping_popup(const std::shared_ptr<GamepadDevice>& gamep
 			}
 			portWidth += ImGui::CalcTextSize("Port").x + ImGui::GetStyle().ItemSpacing.x + ImGui::GetStyle().FramePadding.x;
 		}
-		float comboWidth = ImGui::CalcTextSize("Dreamcast Controls").x + ImGui::GetStyle().ItemSpacing.x + ImGui::GetFontSize() + ImGui::GetStyle().FramePadding.x * 4;
+		float comboWidth = ImGui::CalcTextSize("Dreamcast控制器").x + ImGui::GetStyle().ItemSpacing.x + ImGui::GetFontSize() + ImGui::GetStyle().FramePadding.x * 4;
 		float gameConfigWidth = 0;
 		if (!settings.content.gameId.empty())
-			gameConfigWidth = ImGui::CalcTextSize(gamepad->isPerGameMapping() ? "Delete Game Config" : "Make Game Config").x + ImGui::GetStyle().ItemSpacing.x + ImGui::GetStyle().FramePadding.x * 2;
+			gameConfigWidth = ImGui::CalcTextSize(gamepad->isPerGameMapping() ? "删除游戏配置" : "制作游戏配置").x + ImGui::GetStyle().ItemSpacing.x + ImGui::GetStyle().FramePadding.x * 2;
 		ImGui::SameLine(0, ImGui::GetContentRegionAvail().x - comboWidth - gameConfigWidth - ImGui::GetStyle().ItemSpacing.x - uiScaled(100) * 2 - portWidth);
 
 		ImGui::AlignTextToFramePadding();
@@ -1242,7 +1242,7 @@ static void controller_mapping_popup(const std::shared_ptr<GamepadDevice>& gamep
 		{
 			if (gamepad->isPerGameMapping())
 			{
-				if (ImGui::Button("Delete Game Config", ScaledVec2(0, 30)))
+				if (ImGui::Button("删除游戏配置", ScaledVec2(0, 30)))
 				{
 					gamepad->setPerGameMapping(false);
 					if (!gamepad->find_mapping(map_system))
@@ -1251,23 +1251,23 @@ static void controller_mapping_popup(const std::shared_ptr<GamepadDevice>& gamep
 			}
 			else
 			{
-				if (ImGui::Button("Make Game Config", ScaledVec2(0, 30)))
+				if (ImGui::Button("制作游戏配置", ScaledVec2(0, 30)))
 					gamepad->setPerGameMapping(true);
 			}
 			ImGui::SameLine();
 		}
-		if (ImGui::Button("Reset...", ScaledVec2(100, 30)))
-			ImGui::OpenPopup("Confirm Reset");
+		if (ImGui::Button("重置中……", ScaledVec2(100, 30)))
+			ImGui::OpenPopup("确认重置");
 
 		{
 			ImguiStyleVar _(ImGuiStyleVar_WindowPadding, ScaledVec2(20, 20));
 			if (ImGui::BeginPopupModal("Confirm Reset", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
 			{
-				ImGui::Text("Are you sure you want to reset the mappings to default?");
+				ImGui::Text("是否确实要将映射重置为默认值？");
 				static bool hitbox;
 				if (arcade_button_mode)
 				{
-					ImGui::Text("Controller Type:");
+					ImGui::Text("控制器类型:");
 					if (ImGui::RadioButton("Gamepad", !hitbox))
 						hitbox = false;
 					ImGui::SameLine();
@@ -1294,7 +1294,7 @@ static void controller_mapping_popup(const std::shared_ptr<GamepadDevice>& gamep
 
 		ImGui::SameLine();
 
-		const char* items[] = { "Dreamcast Controls", "Arcade Controls" };
+		const char* items[] = { "Dreamcast控制器", "Arcade控制器" };
 
 		if (last_item_current_map_idx == 2 && game_started)
 			// Select the right mappings for the current game
@@ -1372,7 +1372,7 @@ static void controller_mapping_popup(const std::shared_ptr<GamepadDevice>& gamep
 			if (ImGui::Button("Map"))
 			{
 				map_start_time = getTimeMs();
-				ImGui::OpenPopup("Map Control");
+				ImGui::OpenPopup("按键映射");
 				mapped_device = gamepad;
 				mapped_code = -1;
 				gamepad->detectButtonOrAxisInput([](u32 code, bool analog, bool positive)
@@ -1384,7 +1384,7 @@ static void controller_mapping_popup(const std::shared_ptr<GamepadDevice>& gamep
 			}
 			detect_input_popup(systemMapping);
 			ImGui::SameLine();
-			if (ImGui::Button("Unmap"))
+			if (ImGui::Button("未映射"))
 			{
 				input_mapping = gamepad->get_input_mapping();
 				unmapControl(input_mapping, gamepad_port, systemMapping->key);
@@ -1415,9 +1415,9 @@ static void gamepadSettingsPopup(const std::shared_ptr<GamepadDevice>& gamepad)
 	ImGui::SetNextWindowSize(min(ImGui::GetIO().DisplaySize, ScaledVec2(450.f, 300.f)));
 
 	ImguiStyleVar _(ImGuiStyleVar_WindowRounding, 0);
-	if (ImGui::BeginPopupModal("Gamepad Settings", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_DragScrolling))
+	if (ImGui::BeginPopupModal("游戏手柄设置", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_DragScrolling))
 	{
-		if (ImGui::Button("Done", ScaledVec2(100, 30)))
+		if (ImGui::Button("完成", ScaledVec2(100, 30)))
 		{
 			gamepad->save_mapping();
 			// Update both console and arcade profile/mapping
@@ -1469,8 +1469,8 @@ static void gamepadSettingsPopup(const std::shared_ptr<GamepadDevice>& gamepad)
 			vgamepad::ImguiVGamepadTexture tex;
 			ImGui::Image(tex.getId(), ScaledVec2(300.f, 150.f), ImVec2(0, 1), ImVec2(1, 0));
 #endif
-			const char *gamepadPngTitle = "Select a PNG file";
-			if (ImGui::Button("Choose Image...", ScaledVec2(150, 30)))
+			const char *gamepadPngTitle = "选择 PNG 文件";
+			if (ImGui::Button("选择图片中……", ScaledVec2(150, 30)))
 #ifdef __ANDROID__
 			{
 				if (!hostfs::addStorage(false, false, gamepadPngTitle, gamepadPngFileSelected, "image/png"))
@@ -1482,7 +1482,7 @@ static void gamepadSettingsPopup(const std::shared_ptr<GamepadDevice>& gamepad)
 			}
 #endif
 			ImGui::SameLine();
-			if (ImGui::Button("Use Default", ScaledVec2(150, 30)))
+			if (ImGui::Button("使用默认", ScaledVec2(150, 30)))
 				vgamepad::loadImage("");
 
 			select_file_popup(gamepadPngTitle, [](bool cancelled, std::string selection)
@@ -1493,30 +1493,30 @@ static void gamepadSettingsPopup(const std::shared_ptr<GamepadDevice>& gamepad)
 		}
 		else if (gamepad->is_rumble_enabled())
 		{
-			header("Rumble");
+			header("振动");
 			int power = gamepad->get_rumble_power();
 			ImGui::SetNextItemWidth(uiScaled(300));
-			if (ImGui::SliderInt("Power", &power, 0, 100, "%d%%"))
+			if (ImGui::SliderInt("强度", &power, 0, 100, "%d%%"))
 				gamepad->set_rumble_power(power);
 			ImGui::SameLine();
-			ShowHelpMarker("Rumble power");
+			ShowHelpMarker("振动强度");
 		}
 		if (gamepad->has_analog_stick())
 		{
-			header("Thumbsticks");
+			header("摇杆");
 			int deadzone = std::round(gamepad->get_dead_zone() * 100.f);
 			ImGui::SetNextItemWidth(uiScaled(300));
-			if (ImGui::SliderInt("Dead zone", &deadzone, 0, 100, "%d%%"))
+			if (ImGui::SliderInt("死区", &deadzone, 0, 100, "%d%%"))
 				gamepad->set_dead_zone(deadzone / 100.f);
 			ImGui::SameLine();
-			ShowHelpMarker("Minimum deflection to register as input");
+			ShowHelpMarker("设置为输入的最小偏转");
 			int saturation = std::round(gamepad->get_saturation() * 100.f);
 			ImGui::SetNextItemWidth(uiScaled(300));
-			if (ImGui::SliderInt("Saturation", &saturation, 50, 200, "%d%%"))
+			if (ImGui::SliderInt("饱和", &saturation, 50, 200, "%d%%"))
 				gamepad->set_saturation(saturation / 100.f);
 			ImGui::SameLine();
-			ShowHelpMarker("Value sent to the game at 100% thumbstick deflection. "
-					"Values greater than 100% will saturate before full deflection of the thumbstick.");
+			ShowHelpMarker("在摇杆偏转达到100%时，发送至游戏的数值。 "
+					"大于 100% 的值将在摇杆完全偏转之前饱和。");
 		}
 	    scrollWhenDraggingOnVoid();
 	    windowDragScroll();
@@ -1531,8 +1531,8 @@ void error_popup()
 		ImVec2 padding = ScaledVec2(20, 20);
 		ImguiStyleVar _(ImGuiStyleVar_WindowPadding, padding);
 		ImguiStyleVar _1(ImGuiStyleVar_ItemSpacing, padding);
-		ImGui::OpenPopup("Error");
-		if (ImGui::BeginPopupModal("Error", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar))
+		ImGui::OpenPopup("错误");
+		if (ImGui::BeginPopupModal("错误", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar))
 		{
 			ImGui::PushTextWrapPos(ImGui::GetCursorPos().x + uiScaled(400.f));
 			ImGui::TextWrapped("%s", error_msg.c_str());
@@ -1540,7 +1540,7 @@ void error_popup()
 				ImguiStyleVar _(ImGuiStyleVar_FramePadding, ScaledVec2(16, 3));
 				float currentwidth = ImGui::GetContentRegionAvail().x;
 				ImGui::SetCursorPosX((currentwidth - uiScaled(80.f)) / 2.f + ImGui::GetStyle().WindowPadding.x);
-				if (ImGui::Button("OK", ScaledVec2(80.f, 0)))
+				if (ImGui::Button("好", ScaledVec2(80.f, 0)))
 				{
 					error_msg.clear();
 					ImGui::CloseCurrentPopup();
@@ -1560,16 +1560,16 @@ static void contentpath_warning_popup()
 
     if (scanner.content_path_looks_incorrect)
     {
-        ImGui::OpenPopup("Incorrect Content Location?");
-        if (ImGui::BeginPopupModal("Incorrect Content Location?", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
+        ImGui::OpenPopup("内容位置不正确？");
+        if (ImGui::BeginPopupModal("内容位置不正确？", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
         {
             ImGui::PushTextWrapPos(ImGui::GetCursorPos().x + uiScaled(400.f));
-            ImGui::TextWrapped("  Scanned %d folders but no game can be found!  ", scanner.empty_folders_scanned);
+            ImGui::TextWrapped("  已扫描 %d 个文件夹，但找不到游戏！  ", scanner.empty_folders_scanned);
 			{
 				ImguiStyleVar _(ImGuiStyleVar_FramePadding, ScaledVec2(16, 3));
 				float currentwidth = ImGui::GetContentRegionAvail().x;
 				ImGui::SetCursorPosX((currentwidth - uiScaled(100.f)) / 2.f + ImGui::GetStyle().WindowPadding.x - uiScaled(55.f));
-				if (ImGui::Button("Reselect", ScaledVec2(100.f, 0)))
+				if (ImGui::Button("重新选择", ScaledVec2(100.f, 0)))
 				{
 					scanner.content_path_looks_incorrect = false;
 					ImGui::CloseCurrentPopup();
@@ -1578,7 +1578,7 @@ static void contentpath_warning_popup()
 
 				ImGui::SameLine();
 				ImGui::SetCursorPosX((currentwidth - uiScaled(100.f)) / 2.f + ImGui::GetStyle().WindowPadding.x + uiScaled(55.f));
-				if (ImGui::Button("Cancel", ScaledVec2(100.f, 0)))
+				if (ImGui::Button("取消", ScaledVec2(100.f, 0)))
 				{
 					scanner.content_path_looks_incorrect = false;
 					ImGui::CloseCurrentPopup();
@@ -1593,7 +1593,7 @@ static void contentpath_warning_popup()
     if (show_contentpath_selection)
     {
         scanner.stop();
-        const char *title = "Select a Content Folder";
+        const char *title = "选择内容文件夹";
         ImGui::OpenPopup(title);
         select_file_popup(title, [](bool cancelled, std::string selection)
         {
@@ -1627,38 +1627,38 @@ static void gui_debug_tab()
 		}
 		ImGui::Spacing();
 
-		static const char *levels[] = { "Notice", "Error", "Warning", "Info", "Debug" };
-		if (ImGui::BeginCombo("Log Verbosity", levels[logManager->GetLogLevel() - 1], ImGuiComboFlags_None))
+		static const char *levels[] = { "通知", "错误", "警告", "信息", "调试" };
+		if (ImGui::BeginCombo("对数详细程度", levels[logManager->GetLogLevel() - 1], ImGuiComboFlags_None))
 		{
 			for (std::size_t i = 0; i < std::size(levels); i++)
 			{
 				bool is_selected = logManager->GetLogLevel() - 1 == (int)i;
 				if (ImGui::Selectable(levels[i], &is_selected)) {
 					logManager->SetLogLevel((LogTypes::LOG_LEVELS)(i + 1));
-					cfgSaveInt("log", "Verbosity", i + 1);
+					cfgSaveInt("log", "冗长", i + 1);
 				}
 				if (is_selected)
 					ImGui::SetItemDefaultFocus();
 			}
 			ImGui::EndCombo();
 		}
-		ImGui::InputText("Log Server", &config::LogServer.get(), ImGuiInputTextFlags_CharsNoBlank, nullptr, nullptr);
+		ImGui::InputText("日志服务器", &config::LogServer.get(), ImGuiInputTextFlags_CharsNoBlank, nullptr, nullptr);
         ImGui::SameLine();
-        ShowHelpMarker("Log to this hostname[:port] with UDP. Default port is 31667.");
+        ShowHelpMarker("使用 UDP 记录到此主机名 [:port]。默认端口为 31667。");
 	}
 #if FC_PROFILER
 	ImGui::Spacing();
-	header("Profiling");
+	header("分析");
 	{
 
-		OptionCheckbox("Enable", config::ProfilerEnabled, "Enable the profiler.");
+		OptionCheckbox("启用", config::ProfilerEnabled, "启用 Profiler。");
 		if (!config::ProfilerEnabled)
 		{
 			ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
 		}
-		OptionCheckbox("Display", config::ProfilerDrawToGUI, "Draw the profiler output in an overlay.");
-		OptionCheckbox("Output to terminal", config::ProfilerOutputTTY, "Write the profiler output to the terminal");
+		OptionCheckbox("显示", config::ProfilerDrawToGUI, "在叠加层中绘制性能分析器输出。");
+		OptionCheckbox("输出到终端", config::ProfilerOutputTTY, "将 Profiler 输出写入终端");
 		// TODO frame warning time
 		if (!config::ProfilerEnabled)
 		{
@@ -1686,7 +1686,7 @@ static void addContentPathCallback(const std::string& path)
 
 static void addContentPath(bool start)
 {
-    const char *title = "Select a Content Folder";
+    const char *title = "选择内容文件夹";
     select_file_popup(title, [](bool cancelled, std::string selection) {
 		if (!cancelled)
 			addContentPathCallback(selection);
@@ -1717,22 +1717,22 @@ static void gui_settings_general()
 	{
 		DisabledScope scope(settings.platform.isArcade());
 
-		const char *languages[] = { "Japanese", "English", "German", "French", "Spanish", "Italian", "Default" };
-		OptionComboBox("Language", config::Language, languages, std::size(languages),
-			"The language as configured in the Dreamcast BIOS");
+		const char *languages[] = { "日语", "英语", "德语", "法语", "西班牙语", "意大利语", "默认" };
+		OptionComboBox("语言", config::Language, languages, std::size(languages),
+			"在 Dreamcast BIOS 中配置的语言");
 
-		const char *broadcast[] = { "NTSC", "PAL", "PAL/M", "PAL/N", "Default" };
-		OptionComboBox("Broadcast", config::Broadcast, broadcast, std::size(broadcast),
-				"TV broadcasting standard for non-VGA modes");
+		const char *broadcast[] = { "NTSC", "PAL", "PAL/M", "PAL/N", "默认" };
+		OptionComboBox("广播", config::Broadcast, broadcast, std::size(broadcast),
+				"非 VGA 模式的电视广播标准");
 	}
 
-	const char *consoleRegion[] = { "Japan", "USA", "Europe", "Default" };
+	const char *consoleRegion[] = { "日本", "美国", "欧洲", "默认" };
 	const char *arcadeRegion[] = { "Japan", "USA", "Export", "Korea" };
 	const char **region = settings.platform.isArcade() ? arcadeRegion : consoleRegion;
-	OptionComboBox("Region", config::Region, region, std::size(consoleRegion),
-				"BIOS region");
+	OptionComboBox("区域", config::Region, region, std::size(consoleRegion),
+				"BIOS区域");
 
-	const char *cable[] = { "VGA", "RGB Component", "TV Composite" };
+	const char *cable[] = { "VGA", "RGB 分量", "电视复合" };
 	{
 		DisabledScope scope(config::Cable.isReadOnly() || settings.platform.isArcade());
 
@@ -1752,7 +1752,7 @@ static void gui_settings_general()
 			ImGui::EndCombo();
 		}
         ImGui::SameLine();
-        ShowHelpMarker("Video connection type");
+        ShowHelpMarker("视频连接类型");
 	}
 
 #if !defined(TARGET_IPHONE)
@@ -1761,7 +1761,7 @@ static void gui_settings_general()
     size.y = (ImGui::GetTextLineHeightWithSpacing() + ImGui::GetStyle().FramePadding.y * 2.f)
     				* (config::ContentPath.get().size() + 1);
 
-    if (BeginListBox("Content Location", size, ImGuiWindowFlags_NavFlattened))
+    if (BeginListBox("游戏文件夹位置", size, ImGuiWindowFlags_NavFlattened))
     {
     	int to_delete = -1;
         for (u32 i = 0; i < config::ContentPath.get().size(); i++)
@@ -1778,11 +1778,11 @@ static void gui_settings_general()
         }
 
         ImguiStyleVar _(ImGuiStyleVar_FramePadding, ScaledVec2(24, 3));
-        const bool addContent = ImGui::Button("Add");
+        const bool addContent = ImGui::Button("添加");
         addContentPath(addContent);
         ImGui::SameLine();
 
-        if (ImGui::Button("Rescan Content"))
+        if (ImGui::Button("重新扫描游戏文件夹"))
 			scanner.refresh();
         scrollWhenDraggingOnVoid();
 
@@ -1795,12 +1795,12 @@ static void gui_settings_general()
     	}
     }
     ImGui::SameLine();
-    ShowHelpMarker("The folders where your games are stored");
+    ShowHelpMarker("存储游戏的文件夹");
 
     size.y = ImGui::GetTextLineHeightWithSpacing() * 1.25f + ImGui::GetStyle().FramePadding.y * 2.0f;
 
 #if defined(__linux__) && !defined(__ANDROID__)
-    if (BeginListBox("Data Folder", size, ImGuiWindowFlags_NavFlattened))
+    if (BeginListBox("数据文件夹", size, ImGuiWindowFlags_NavFlattened))
     {
     	ImGui::AlignTextToFramePadding();
     	float w = ImGui::GetContentRegionAvail().x - ImGui::GetStyle().FramePadding.x;
@@ -1809,12 +1809,12 @@ static void gui_settings_general()
         ImGui::EndListBox();
     }
     ImGui::SameLine();
-    ShowHelpMarker("The folder containing BIOS files, as well as saved VMUs and states");
+    ShowHelpMarker("包含 BIOS 文件以及保存的 VMU 和状态的文件夹");
 #else
 #if defined(__ANDROID__) || defined(TARGET_MAC)
     size.y += ImGui::GetTextLineHeightWithSpacing() * 1.25f;
 #endif
-    if (BeginListBox("Home Folder", size, ImGuiWindowFlags_NavFlattened))
+    if (BeginListBox("主文件夹", size, ImGuiWindowFlags_NavFlattened))
     {
     	ImGui::AlignTextToFramePadding();
     	float w = ImGui::GetContentRegionAvail().x - ImGui::GetStyle().FramePadding.x;
@@ -1824,15 +1824,15 @@ static void gui_settings_general()
 #ifdef __ANDROID__
         {
         	DisabledScope _(!config::UseSafFilePicker);
-			if (ImGui::Button("Import"))
+			if (ImGui::Button("导入"))
 				hostfs::importHomeDirectory();
 			ImGui::SameLine();
-			if (ImGui::Button("Export"))
+			if (ImGui::Button("导出"))
 				hostfs::exportHomeDirectory();
         }
 #endif
 #ifdef TARGET_MAC
-        if (ImGui::Button("Reveal in Finder"))
+        if (ImGui::Button("在 Finder 中显示"))
         {
             char temp[512];
             sprintf(temp, "open \"%s\"", get_writable_config_path("").c_str());
@@ -1842,57 +1842,57 @@ static void gui_settings_general()
         ImGui::EndListBox();
     }
     ImGui::SameLine();
-    ShowHelpMarker("The folder where Flycast saves configuration files and VMUs. BIOS files should be in a subfolder named \"data\"");
+    ShowHelpMarker("Flycast 保存配置文件和 VMU 的文件夹。BIOS 文件应位于名为\"data\"的子文件夹中");
 #endif // !linux
 #else // TARGET_IPHONE
     {
     	ImguiStyleVar _(ImGuiStyleVar_FramePadding, ScaledVec2(24, 3));
-		if (ImGui::Button("Rescan Content"))
+		if (ImGui::Button("重新扫描游戏文件夹"))
 			scanner.refresh();
     }
 #endif
 
-	OptionCheckbox("Box Art Game List", config::BoxartDisplayMode,
-			"Display game cover art in the game list.");
-	OptionCheckbox("Fetch Box Art", config::FetchBoxart,
-			"Fetch cover images from TheGamesDB.net.");
-	if (OptionSlider("UI Scaling", config::UIScaling, 50, 200, "Adjust the size of UI elements and fonts.", "%d%%"))
+	OptionCheckbox("游戏列表封面", config::BoxartDisplayMode,
+			"在游戏列表中显示游戏封面。");
+	OptionCheckbox("获取封面", config::FetchBoxart,
+			"从 TheGamesDB.net 获取封面图像。");
+	if (OptionSlider("UI 缩放", config::UIScaling, 50, 200, "调整 UI 元素和字体的大小。", "%d%%"))
 		uiUserScaleUpdated = true;
 	if (uiUserScaleUpdated)
 	{
 		ImGui::SameLine();
-		if (ImGui::Button("Apply")) {
+		if (ImGui::Button("应用")) {
 			mainui_reinit();
 			uiUserScaleUpdated = false;
 		}
 	}
 
-	if (OptionCheckbox("Hide Legacy Naomi Roms", config::HideLegacyNaomiRoms,
-			"Hide .bin, .dat and .lst files from the content browser"))
+	if (OptionCheckbox("隐藏传统的Naomi Roms", config::HideLegacyNaomiRoms,
+			"在内容浏览器中隐藏 .bin、.dat 和 .lst 文件"))
 		scanner.refresh();
 #ifdef __ANDROID__
-	OptionCheckbox("Use SAF File Picker", config::UseSafFilePicker,
-			"Use Android Storage Access Framework file picker to select folders and files. Ignored on Android 10 and later.");
+	OptionCheckbox("使用 SAF 文件选取器", config::UseSafFilePicker,
+			"使用 Android Storage Access Framework 文件选择器选择文件夹和文件。在 Android 10 及更高版本上被忽略。");
 #endif
 
-	ImGui::Text("Automatic State:");
-	OptionCheckbox("Load", config::AutoLoadState,
-			"Load the last saved state of the game when starting");
+	ImGui::Text("自动保存状态:");
+	OptionCheckbox("加载", config::AutoLoadState,
+			"启动时加载游戏的最后保存状态");
 	ImGui::SameLine();
-	OptionCheckbox("Save", config::AutoSaveState,
-			"Save the state of the game when stopping");
-	OptionCheckbox("Naomi Free Play", config::ForceFreePlay, "Configure Naomi games in Free Play mode.");
+	OptionCheckbox("保存", config::AutoSaveState,
+			"停止时保存游戏状态");
+	OptionCheckbox("Naomi Free Play", config::ForceFreePlay, "在 Free Play 模式下配置 Naomi 游戏。");
 #if USE_DISCORD
-	OptionCheckbox("Discord Presence", config::DiscordPresence, "Show which game you are playing on Discord");
+	OptionCheckbox("Discord 状态", config::DiscordPresence, "显示您在 Discord 上玩的游戏");
 #endif
 #ifdef USE_RACHIEVEMENTS
-	OptionCheckbox("Enable RetroAchievements", config::EnableAchievements, "Track your game achievements using RetroAchievements.org");
+	OptionCheckbox("启用 RetroAchievements", config::EnableAchievements, "使用 RetroAchievements.org 跟踪您的游戏成就");
 	{
 		DisabledScope _(!config::EnableAchievements);
 		ImGui::Indent();
-		OptionCheckbox("Hardcore Mode", config::AchievementsHardcoreMode,
-				"Enable RetroAchievements hardcore mode. Using cheats and loading a state are not allowed in this mode.");
-		ImGui::InputText("Username", &config::AchievementsUserName.get(),
+		OptionCheckbox("硬核模式", config::AchievementsHardcoreMode,
+				"启用 RetroAchievements 硬核模式。在此模式下不允许使用作弊和加载状态。");
+		ImGui::InputText("用户名", &config::AchievementsUserName.get(),
 				achievements::isLoggedOn() ? ImGuiInputTextFlags_ReadOnly : ImGuiInputTextFlags_None, nullptr, nullptr);
 		if (config::EnableAchievements)
 		{
@@ -1900,20 +1900,20 @@ static void gui_settings_general()
 			achievements::init();
 			if (achievements::isLoggedOn())
 			{
-				ImGui::Text("Authentication successful");
+				ImGui::Text("身份验证成功");
 				if (futureLogin.valid())
 					futureLogin.get();
-				if (ImGui::Button("Logout", ScaledVec2(100, 0)))
+				if (ImGui::Button("注销", ScaledVec2(100, 0)))
 					achievements::logout();
 			}
 			else
 			{
 				static char password[256];
-				ImGui::InputText("Password", password, sizeof(password), ImGuiInputTextFlags_Password, nullptr, nullptr);
+				ImGui::InputText("密码", password, sizeof(password), ImGuiInputTextFlags_Password, nullptr, nullptr);
 				if (futureLogin.valid())
 				{
 					if (futureLogin.wait_for(std::chrono::seconds::zero()) == std::future_status::timeout) {
-						ImGui::Text("Authenticating...");
+						ImGui::Text("正在认证……");
 					}
 					else
 					{
@@ -1926,7 +1926,7 @@ static void gui_settings_general()
 				}
 				{
 					DisabledScope _(config::AchievementsUserName.get().empty() || password[0] == '\0');
-					if (ImGui::Button("Login", ScaledVec2(100, 0)) && !futureLogin.valid())
+					if (ImGui::Button("登录", ScaledVec2(100, 0)) && !futureLogin.valid())
 					{
 						futureLogin = achievements::login(config::AchievementsUserName.get().c_str(), password);
 						memset(password, 0, sizeof(password));
@@ -1941,27 +1941,27 @@ static void gui_settings_general()
 
 static void gui_settings_controls(bool& maple_devices_changed)
 {
-	header("Physical Devices");
+	header("物理设备");
     {
 		if (ImGui::BeginTable("physicalDevices", 4, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_NoSavedSettings))
 		{
-			ImGui::TableSetupColumn("System", ImGuiTableColumnFlags_WidthFixed);
-			ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_WidthStretch);
-			ImGui::TableSetupColumn("Port", ImGuiTableColumnFlags_WidthFixed);
+			ImGui::TableSetupColumn("系统", ImGuiTableColumnFlags_WidthFixed);
+			ImGui::TableSetupColumn("姓名", ImGuiTableColumnFlags_WidthStretch);
+			ImGui::TableSetupColumn("端口", ImGuiTableColumnFlags_WidthFixed);
 			ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed);
 
-			const float portComboWidth = calcComboWidth("None");
+			const float portComboWidth = calcComboWidth("无");
 			const ImVec4 gray{ 0.5f, 0.5f, 0.5f, 1.f };
 
 			ImGui::TableNextRow();
 			ImGui::TableSetColumnIndex(0);
-			ImGui::TextColored(gray, "System");
+			ImGui::TextColored(gray, "系统");
 
 			ImGui::TableSetColumnIndex(1);
-			ImGui::TextColored(gray, "Name");
+			ImGui::TextColored(gray, "姓名");
 
 			ImGui::TableSetColumnIndex(2);
-			ImGui::TextColored(gray, "Port");
+			ImGui::TextColored(gray, "端口");
 
 			for (int i = 0; i < GamepadDevice::GetGamepadCount(); i++)
 			{
@@ -1996,10 +1996,10 @@ static void gui_settings_controls(bool& maple_devices_changed)
 
 				ImGui::TableSetColumnIndex(3);
 				ImGui::SameLine(0, uiScaled(8));
-				if (gamepad->remappable() && ImGui::Button("Map"))
+				if (gamepad->remappable() && ImGui::Button("映射"))
 				{
 					gamepad_port = 0;
-					ImGui::OpenPopup("Controller Mapping");
+					ImGui::OpenPopup("控制器映射");
 				}
 
 				controller_mapping_popup(gamepad);
@@ -2007,7 +2007,7 @@ static void gui_settings_controls(bool& maple_devices_changed)
 #if defined(__ANDROID__) || defined(TARGET_IPHONE)
 				if (gamepad->is_virtual_gamepad())
 				{
-					if (ImGui::Button("Edit Layout"))
+					if (ImGui::Button("编辑布局"))
 					{
 						vgamepad::startEditing();
 						gui_setState(GuiState::VJoyEdit);
@@ -2018,8 +2018,8 @@ static void gui_settings_controls(bool& maple_devices_changed)
 					|| gamepad->is_virtual_gamepad())
 				{
 					ImGui::SameLine(0, uiScaled(16));
-					if (ImGui::Button("Settings"))
-						ImGui::OpenPopup("Gamepad Settings");
+					if (ImGui::Button("设置"))
+						ImGui::OpenPopup("游戏手柄设置");
 					gamepadSettingsPopup(gamepad);
 				}
 			}
@@ -2028,13 +2028,13 @@ static void gui_settings_controls(bool& maple_devices_changed)
     }
 
 	ImGui::Spacing();
-	OptionSlider("Mouse sensitivity", config::MouseSensitivity, 1, 500);
+	OptionSlider("鼠标灵敏度", config::MouseSensitivity, 1, 500);
 #if defined(_WIN32) && !defined(TARGET_UWP)
-	OptionCheckbox("Use Raw Input", config::UseRawInput, "Supports multiple pointing devices (mice, light guns) and keyboards");
+	OptionCheckbox("使用 Raw Input", config::UseRawInput, "支持多个指针设备（鼠标、光枪）和键盘");
 #endif
 
 	ImGui::Spacing();
-	header("Dreamcast Devices");
+	header("Dreamcast 设备");
     {
 		bool is_there_any_xhair = false;
 		if (ImGui::BeginTable("dreamcastDevices", 4, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_NoSavedSettings,
@@ -2047,7 +2047,7 @@ static void gui_settings_controls(bool& maple_devices_changed)
 			{
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);
-				ImGui::Text("Port %c", bus + 'A');
+				ImGui::Text("端口 %c", bus + 'A');
 
 				ImGui::TableSetColumnIndex(1);
 				char device_name[32];
@@ -2122,7 +2122,7 @@ static void gui_settings_controls(bool& maple_devices_changed)
 							| ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoLabel);
 					ImGui::SameLine();
 					bool enabled = color != 0;
-					if (ImGui::Checkbox("Crosshair", &enabled) || colorChanged)
+					if (ImGui::Checkbox("十字准线", &enabled) || colorChanged)
 					{
 						if (enabled)
 						{
@@ -2146,9 +2146,9 @@ static void gui_settings_controls(bool& maple_devices_changed)
 		}
 		{
 			DisabledScope scope(!is_there_any_xhair);
-			OptionSlider("Crosshair Size", config::CrosshairSize, 10, 100);
+			OptionSlider("十字准线大小", config::CrosshairSize, 10, 100);
 		}
-		OptionCheckbox("Per Game VMU A1", config::PerGameVmu, "When enabled, each game has its own VMU on port 1 of controller A.");
+		OptionCheckbox("每个游戏 VMU A1", config::PerGameVmu, "启用后，每个游戏在控制器 A 的端口 1 上都有自己的 VMU。");
     }
 }
 
@@ -2207,7 +2207,7 @@ static void gui_settings_video()
     float innerSpacing = ImGui::GetStyle().ItemInnerSpacing.x;
 	if (apiCount > 1)
 	{
-		header("Graphics API");
+		header("图形 API");
 		{
 			ImGui::Columns(apiCount, "renderApi", false);
 #ifdef USE_OPENGL
@@ -2218,7 +2218,7 @@ static void gui_settings_video()
 #ifdef __APPLE__
 			ImGui::RadioButton("Vulkan (Metal)", &renderApi, 1);
 			ImGui::SameLine(0, innerSpacing);
-			ShowHelpMarker("MoltenVK: An implementation of Vulkan that runs on Apple's Metal graphics framework");
+			ShowHelpMarker("MoltenVK：在 Apple 的 Metal 图形框架上运行的 Vulkan 实现");
 #else
 			ImGui::RadioButton("Vulkan", &renderApi, 1);
 #endif // __APPLE__
@@ -2238,24 +2238,24 @@ static void gui_settings_video()
 			ImGui::Columns(1, nullptr, false);
     	}
     }
-    header("Transparent Sorting");
+    header("透明排序");
     {
 		const bool has_per_pixel = GraphicsContext::Instance()->hasPerPixel();
     	int renderer = perPixel ? 2 : config::PerStripSorting ? 1 : 0;
     	ImGui::Columns(has_per_pixel ? 3 : 2, "renderers", false);
-    	ImGui::RadioButton("Per Triangle", &renderer, 0);
+    	ImGui::RadioButton("三角形", &renderer, 0);
         ImGui::SameLine();
-        ShowHelpMarker("Sort transparent polygons per triangle. Fast but may produce graphical glitches");
+        ShowHelpMarker("按三角形对透明多边形进行排序。速度快，但可能会产生图形故障");
     	ImGui::NextColumn();
-    	ImGui::RadioButton("Per Strip", &renderer, 1);
+    	ImGui::RadioButton("条状", &renderer, 1);
         ImGui::SameLine();
-        ShowHelpMarker("Sort transparent polygons per strip. Faster but may produce graphical glitches");
+        ShowHelpMarker("按条带对透明多边形进行排序。更快，但可能会产生图形故障");
         if (has_per_pixel)
         {
         	ImGui::NextColumn();
-        	ImGui::RadioButton("Per Pixel", &renderer, 2);
+        	ImGui::RadioButton("像素", &renderer, 2);
         	ImGui::SameLine();
-        	ShowHelpMarker("Sort transparent polygons per pixel. Slower but accurate");
+        	ShowHelpMarker("按像素对透明多边形进行排序。速度较慢但准确");
         }
     	ImGui::Columns(1, NULL, false);
     	switch (renderer)
@@ -2275,10 +2275,10 @@ static void gui_settings_video()
     }
 	ImGui::Spacing();
 
-    header("Rendering Options");
+    header("渲染选项");
     {
         const std::array<float, 13> scalings{ 0.5f, 1.f, 1.5f, 2.f, 2.5f, 3.f, 4.f, 4.5f, 5.f, 6.f, 7.f, 8.f, 9.f };
-        const std::array<std::string, 13> scalingsText{ "Half", "Native", "x1.5", "x2", "x2.5", "x3", "x4", "x4.5", "x5", "x6", "x7", "x8", "x9" };
+        const std::array<std::string, 13> scalingsText{ "一半", "原生", "x1.5", "x2", "x2.5", "x3", "x4", "x4.5", "x5", "x6", "x7", "x8", "x9" };
         std::array<int, scalings.size()> vres;
         std::array<std::string, scalings.size()> resLabels;
         u32 selected = 0;
@@ -2323,53 +2323,53 @@ static void gui_settings_video()
         }
         ImGui::SameLine(0, innerSpacing);
 
-        ImGui::Text("Internal Resolution");
+        ImGui::Text("内部分辨率");
         ImGui::SameLine();
-        ShowHelpMarker("Internal render resolution. Higher is better, but more demanding on the GPU. Values higher than your display resolution (but no more than double your display resolution) can be used for supersampling, which provides high-quality antialiasing without reducing sharpness.");
+        ShowHelpMarker("内部渲染分辨率。越高越好，但对 GPU 的要求更高。高于显示分辨率的值（但不超过显示分辨率的两倍）可用于超级采样，从而在不降低锐化度的情况下提供高质量的抗锯齿。");
 
 #ifndef TARGET_IPHONE
-    	OptionCheckbox("VSync", config::VSync, "Synchronizes the frame rate with the screen refresh rate. Recommended");
+    	OptionCheckbox("垂直同步", config::VSync, "将帧速率与屏幕刷新率同步。推荐");
     	if (isVulkan(config::RendererType))
     	{
 	    	ImGui::Indent();
 			{
 				DisabledScope scope(!config::VSync);
 
-				OptionCheckbox("Duplicate frames", config::DupeFrames, "Duplicate frames on high refresh rate monitors (120 Hz and higher)");
+				OptionCheckbox("重复帧", config::DupeFrames, "在高刷新率显示器（120 Hz 或更高）上复制帧");
 	    	}
 	    	ImGui::Unindent();
     	}
 #endif
-    	OptionCheckbox("Show VMU In-game", config::FloatVMUs, "Show the VMU LCD screens while in-game");
-    	OptionCheckbox("Full Framebuffer Emulation", config::EmulateFramebuffer,
-    			"Fully accurate VRAM framebuffer emulation. Helps games that directly access the framebuffer for special effects. "
-    			"Very slow and incompatible with upscaling and wide screen.");
-    	OptionCheckbox("Load Custom Textures", config::CustomTextures,
-    			"Load custom/high-res textures from data/textures/<game id>");
+    	OptionCheckbox("在游戏中显示 VMU", config::FloatVMUs, "在游戏中显示 VMU LCD 屏幕");
+    	OptionCheckbox("完全 Framebuffer 模拟", config::EmulateFramebuffer,
+    			"完全准确的 VRAM 帧缓冲模拟。帮助直接访问帧缓冲区以获得特殊效果的游戏。 "
+    			"非常慢，与放大和宽屏幕不兼容。");
+    	OptionCheckbox("加载自定义纹理", config::CustomTextures,
+    			"从 data/textures/<game id>加载自定义/高分辨率纹理");
     }
 	ImGui::Spacing();
-    header("Aspect Ratio");
+    header("纵横比");
     {
-    	OptionCheckbox("Widescreen", config::Widescreen,
-    			"Draw geometry outside of the normal 4:3 aspect ratio. May produce graphical glitches in the revealed areas.\nAspect Fit and shows the full 16:9 content.");
+    	OptionCheckbox("宽屏", config::Widescreen,
+    			"在正常的 4：3 纵横比之外绘制几何图形。可能会在显示的区域产生图形故障。n纵横比适合并显示完整的 16：9 内容。");
 		{
 			DisabledScope scope(!config::Widescreen);
 
 			ImGui::Indent();
-			OptionCheckbox("Super Widescreen", config::SuperWidescreen,
-					"Use the full width of the screen or window when its aspect ratio is greater than 16:9.\nAspect Fill and remove black bars.");
+			OptionCheckbox("超级宽屏", config::SuperWidescreen,
+					"当屏幕或窗口的纵横比大于 16：9 时，使用屏幕或窗口的整个宽度。n纵横比填充并删除黑条。");
 			ImGui::Unindent();
     	}
-    	OptionCheckbox("Widescreen Game Cheats", config::WidescreenGameHacks,
-    			"Modify the game so that it displays in 16:9 anamorphic format and use horizontal screen stretching. Only some games are supported.");
-    	OptionSlider("Horizontal Stretching", config::ScreenStretching, 100, 250,
-    			"Stretch the screen horizontally", "%d%%");
-    	OptionCheckbox("Rotate Screen 90°", config::Rotate90, "Rotate the screen 90° counterclockwise");
+    	OptionCheckbox("宽屏游戏金手指", config::WidescreenGameHacks,
+    			"修改游戏，使其以 16：9 变形格式显示，并使用水平屏幕拉伸。仅支持部分游戏。");
+    	OptionSlider("水平拉伸", config::ScreenStretching, 100, 250,
+    			"水平拉伸屏幕", "%d%%");
+    	OptionCheckbox("将屏幕旋转 90°", config::Rotate90, "将屏幕逆时针旋转 90°");
     }
 	if (perPixel)
 	{
 		ImGui::Spacing();
-		header("Per Pixel Settings");
+		header("逐像素设置");
 
 		const std::array<int64_t, 4> bufSizes{ 512_MB, 1_GB, 2_GB, 4_GB };
 		const std::array<std::string, 4> bufSizesText{ "512 MB", "1 GB", "2 GB", "4 GB" };
@@ -2410,44 +2410,44 @@ static void gui_settings_video()
 		}
 		ImGui::SameLine(0, innerSpacing);
 
-        ImGui::Text("Pixel Buffer Size");
+        ImGui::Text("像素缓冲区大小");
         ImGui::SameLine();
-        ShowHelpMarker("The size of the pixel buffer. May need to be increased when upscaling by a large factor.");
+        ShowHelpMarker("像素缓冲区的大小。当放大大量时，可能需要增加。");
 
-        OptionSlider("Maximum Layers", config::PerPixelLayers, 8, 128,
-        		"Maximum number of transparent layers. May need to be increased for some complex scenes. Decreasing it may improve performance.");
+        OptionSlider("最大层数", config::PerPixelLayers, 8, 128,
+        		"最大透明层数。对于某些复杂的场景，可能需要增加。降低它可能会提高性能。");
 	}
 	ImGui::Spacing();
-    header("Performance");
+    header("性能");
     {
-    	ImGui::Text("Automatic Frame Skipping:");
+    	ImGui::Text("自动跳帧:");
     	ImGui::Columns(3, "autoskip", false);
-    	OptionRadioButton("Disabled", config::AutoSkipFrame, 0, "No frame skipping");
+    	OptionRadioButton("禁用", config::AutoSkipFrame, 0, "无跳帧");
     	ImGui::NextColumn();
-    	OptionRadioButton("Normal", config::AutoSkipFrame, 1, "Skip a frame when the GPU and CPU are both running slow");
+    	OptionRadioButton("一般", config::AutoSkipFrame, 1, "当 GPU 和 CPU 都运行缓慢时跳过一帧");
     	ImGui::NextColumn();
-    	OptionRadioButton("Maximum", config::AutoSkipFrame, 2, "Skip a frame when the GPU is running slow");
+    	OptionRadioButton("最大", config::AutoSkipFrame, 2, "当 GPU 运行缓慢时跳帧");
     	ImGui::Columns(1, nullptr, false);
 
-    	OptionArrowButtons("Frame Skipping", config::SkipFrame, 0, 6,
-    			"Number of frames to skip between two actually rendered frames");
-    	OptionCheckbox("Shadows", config::ModifierVolumes,
-    			"Enable modifier volumes, usually used for shadows");
-    	OptionCheckbox("Fog", config::Fog, "Enable fog effects");
+    	OptionArrowButtons("跳帧", config::SkipFrame, 0, 6,
+    			"在两个实际渲染的帧之间跳过的帧数");
+    	OptionCheckbox("阴影", config::ModifierVolumes,
+    			"启用修改器体积，通常用于阴影");
+    	OptionCheckbox("雾化", config::Fog, "启用雾化效果");
     }
     ImGui::Spacing();
-	header("Advanced");
+	header("高级");
     {
-    	OptionCheckbox("Delay Frame Swapping", config::DelayFrameSwapping,
-    			"Useful to avoid flashing screen or glitchy videos. Not recommended on slow platforms");
-    	OptionCheckbox("Fix Upscale Bleeding Edge", config::FixUpscaleBleedingEdge,
-    			"Helps with texture bleeding case when upscaling. Disabling it can help if pixels are warping when upscaling in 2D games (MVC2, CVS, KOF, etc.)");
-    	OptionCheckbox("Native Depth Interpolation", config::NativeDepthInterpolation,
-    			"Helps with texture corruption and depth issues on AMD GPUs. Can also help Intel GPUs in some cases.");
-    	OptionCheckbox("Copy Rendered Textures to VRAM", config::RenderToTextureBuffer,
-    			"Copy rendered-to textures back to VRAM. Slower but accurate");
+    	OptionCheckbox("延迟帧交换", config::DelayFrameSwapping,
+    			"有助于避免屏幕闪烁或视频出现故障。不建议在慢速平台上使用");
+    	OptionCheckbox("修复 Upscale Bleeding Edge", config::FixUpscaleBleedingEdge,
+    			"有助于在放大时出现纹理渗出情况。如果在 2D 游戏（MVC2、CVS、KOF 等）中放大时像素发生翘曲，则禁用它会有所帮助。");
+    	OptionCheckbox("原生深度插值", config::NativeDepthInterpolation,
+    			"有助于解决 AMD GPU 上的纹理损坏和深度问题。在某些情况下也可以帮助 Intel GPU。");
+    	OptionCheckbox("将渲染的纹理复制到 VRAM", config::RenderToTextureBuffer,
+    			"将渲染到的纹理复制回 VRAM。速度较慢但准确");
 		const std::array<int, 5> aniso{ 1, 2, 4, 8, 16 };
-        const std::array<std::string, 5> anisoText{ "Disabled", "2x", "4x", "8x", "16x" };
+        const std::array<std::string, 5> anisoText{ "禁用", "2x", "4x", "8x", "16x" };
         u32 afSelected = 0;
         for (u32 i = 0; i < aniso.size(); i++)
         {
@@ -2484,58 +2484,58 @@ static void gui_settings_video()
         }
         ImGui::SameLine(0, innerSpacing);
 
-        ImGui::Text("Anisotropic Filtering");
+        ImGui::Text("各向异性过滤");
         ImGui::SameLine();
-        ShowHelpMarker("Higher values make textures viewed at oblique angles look sharper, but are more demanding on the GPU. This option only has a visible impact on mipmapped textures.");
+        ShowHelpMarker("较高的值会使以倾斜角度查看的纹理看起来更清晰，但对 GPU 的要求更高。此选项仅对 mipmapped 纹理有可见影响。");
 
-    	ImGui::Text("Texture Filtering:");
+    	ImGui::Text("纹理过滤:");
     	ImGui::Columns(3, "textureFiltering", false);
-    	OptionRadioButton("Default", config::TextureFiltering, 0, "Use the game's default texture filtering");
+    	OptionRadioButton("默认", config::TextureFiltering, 0, "使用游戏的默认纹理筛选");
     	ImGui::NextColumn();
-    	OptionRadioButton("Force Nearest-Neighbor", config::TextureFiltering, 1, "Force nearest-neighbor filtering for all textures. Crisper appearance, but may cause various rendering issues. This option usually does not affect performance.");
+    	OptionRadioButton("邻近取样", config::TextureFiltering, 1, "对所有纹理强制最近邻筛选。外观更清晰，但可能会导致各种渲染问题。此选项通常不会影响性能。");
     	ImGui::NextColumn();
-    	OptionRadioButton("Force Linear", config::TextureFiltering, 2, "Force linear filtering for all textures. Smoother appearance, but may cause various rendering issues. This option usually does not affect performance.");
+    	OptionRadioButton("线性", config::TextureFiltering, 2, "强制对所有纹理进行线性过滤。外观更平滑，但可能会导致各种渲染问题。此选项通常不会影响性能。");
     	ImGui::Columns(1, nullptr, false);
 
-    	OptionCheckbox("Show FPS Counter", config::ShowFPS, "Show on-screen frame/sec counter");
+    	OptionCheckbox("显示 FPS 计数器", config::ShowFPS, "在屏幕上显示帧数");
     }
 	ImGui::Spacing();
-    header("Texture Upscaling");
+    header("纹理放大");
     {
 #ifdef _OPENMP
-    	OptionArrowButtons("Texture Upscaling", config::TextureUpscale, 1, 8,
-    			"Upscale textures with the xBRZ algorithm. Only on fast platforms and for certain 2D games", "x%d");
-    	OptionSlider("Texture Max Size", config::MaxFilteredTextureSize, 8, 1024,
-    			"Textures larger than this dimension squared will not be upscaled");
-    	OptionArrowButtons("Max Threads", config::MaxThreads, 1, 8,
-    			"Maximum number of threads to use for texture upscaling. Recommended: number of physical cores minus one");
+    	OptionArrowButtons("纹理放大", config::TextureUpscale, 1, 8,
+    			"使用 xBRZ 算法放大纹理。仅适用于快速平台和某些 2D 游戏", "x%d");
+    	OptionSlider("纹理最大大小", config::MaxFilteredTextureSize, 8, 1024,
+    			"大于此维度平方的纹理不会被放大");
+    	OptionArrowButtons("最大线程数量", config::MaxThreads, 1, 8,
+    			"用于纹理放大的最大线程数。建议：物理内核数减 1");
 #endif
     }
 #ifdef VIDEO_ROUTING
 #ifdef __APPLE__
-	header("Video Routing (Syphon)");
+	header("视频路由 （Syphon）");
 #elif defined(_WIN32)
-	((renderApi == 0) || (renderApi == 3)) ? header("Video Routing (Spout)") : header("Video Routing (Only available with OpenGL or DirectX 11)");
+	((renderApi == 0) || (renderApi == 3)) ? header("视频路由 （Spout）") : header("视频路由（仅适用于 OpenGL 或 DirectX 11）");
 #endif
 	{
 #ifdef _WIN32
 		DisabledScope scope(!((renderApi == 0) || (renderApi == 3)));
 #endif
-		OptionCheckbox("Send video content to another program", config::VideoRouting,
-			"e.g. Route GPU texture to OBS Studio directly instead of using CPU intensive Display/Window Capture");
+		OptionCheckbox("将视频内容发送到其他程序", config::VideoRouting,
+			"例如，将 GPU 纹理直接路由到 OBS Studio，而不是使用 CPU 密集型显示/窗口捕获");
 
 		{
 			DisabledScope scope(!config::VideoRouting);
-			OptionCheckbox("Scale down before sending", config::VideoRoutingScale, "Could increase performance when sharing a smaller texture, YMMV");
+			OptionCheckbox("发送前缩小", config::VideoRoutingScale, "共享较小纹理时可以提高性能，YMMV");
 			{
 				DisabledScope scope(!config::VideoRoutingScale);
 				static int vres = config::VideoRoutingVRes;
-				if (ImGui::InputInt("Output vertical resolution", &vres))
+				if (ImGui::InputInt("输出垂直分辨率", &vres))
 				{
 					config::VideoRoutingVRes = vres;
 				}
 			}
-			ImGui::Text("Output texture size: %d x %d", config::VideoRoutingScale ? config::VideoRoutingVRes * settings.display.width / settings.display.height : settings.display.width, config::VideoRoutingScale ? config::VideoRoutingVRes : settings.display.height);
+			ImGui::Text("输出纹理大小: %d x %d", config::VideoRoutingScale ? config::VideoRoutingVRes * settings.display.width / settings.display.height : settings.display.width, config::VideoRoutingScale ? config::VideoRoutingVRes : settings.display.height);
 		}
 	}
 #endif
@@ -2559,27 +2559,27 @@ static void gui_settings_video()
 
 static void gui_settings_audio()
 {
-	OptionCheckbox("Enable DSP", config::DSPEnabled,
-			"Enable the Dreamcast Digital Sound Processor. Only recommended on fast platforms");
-    OptionCheckbox("Enable VMU Sounds", config::VmuSound, "Play VMU beeps when enabled.");
+	OptionCheckbox("启用 DSP", config::DSPEnabled,
+			"启用 Dreamcast 数字声音处理器。仅在快速平台上推荐");
+    OptionCheckbox("启用 VMU 声音", config::VmuSound, "启用 VMU 时播放 VMU 蜂鸣声。");
 
-	if (OptionSlider("Volume Level", config::AudioVolume, 0, 100, "Adjust the emulator's audio level", "%d%%"))
+	if (OptionSlider("音量级别", config::AudioVolume, 0, 100, "调整模拟器的音频级别", "%d%%"))
 	{
 		config::AudioVolume.calcDbPower();
 	};
 #ifdef __ANDROID__
 	if (config::AudioBackend.get() == "auto" || config::AudioBackend.get() == "android")
-		OptionCheckbox("Automatic Latency", config::AutoLatency,
-				"Automatically set audio latency. Recommended");
+		OptionCheckbox("自动延迟", config::AutoLatency,
+				"自动设置音频延迟。推荐");
 #endif
     if (!config::AutoLatency
     		|| (config::AudioBackend.get() != "auto" && config::AudioBackend.get() != "android"))
     {
 		int latency = (int)roundf(config::AudioBufferSize * 1000.f / 44100.f);
-		ImGui::SliderInt("Latency", &latency, 12, 512, "%d ms");
+		ImGui::SliderInt("延迟", &latency, 12, 512, "%d ms");
 		config::AudioBufferSize = (int)roundf(latency * 44100.f / 1000.f);
 		ImGui::SameLine();
-		ShowHelpMarker("Sets the maximum audio latency. Not supported by all audio drivers.");
+		ShowHelpMarker("设置最大音频延迟。并非所有音频驱动程序都支持。");
     }
 
 	AudioBackend *backend = nullptr;
@@ -2592,10 +2592,10 @@ static void gui_settings_audio()
 	}
 
 	AudioBackend *current_backend = backend;
-	if (ImGui::BeginCombo("Audio Driver", backend_name.c_str(), ImGuiComboFlags_None))
+	if (ImGui::BeginCombo("音频驱动程序", backend_name.c_str(), ImGuiComboFlags_None))
 	{
 		bool is_selected = (config::AudioBackend.get() == "auto");
-		if (ImGui::Selectable("auto - Automatic driver selection", &is_selected))
+		if (ImGui::Selectable("auto - 自动选择驱动程序", &is_selected))
 			config::AudioBackend.set("auto");
 
 		for (u32 i = 0; i < AudioBackend::getCount(); i++)
@@ -2614,7 +2614,7 @@ static void gui_settings_audio()
 		ImGui::EndCombo();
 	}
 	ImGui::SameLine();
-	ShowHelpMarker("The audio driver to use");
+	ShowHelpMarker("要使用的音频驱动程序");
 
 	if (current_backend != nullptr)
 	{
@@ -2660,7 +2660,7 @@ static void gui_settings_audio()
 				}
 			}
 			else {
-				WARN_LOG(RENDERER, "Unknown option");
+				WARN_LOG(RENDERER, "未知选项");
 			}
 
 			options++;
@@ -2671,7 +2671,7 @@ static void gui_settings_audio()
 static void gui_settings_network()
 {
 	ImGuiStyle& style = ImGui::GetStyle();
-	header("Network Type");
+	header("网络类型");
 	{
 		DisabledScope scope(game_started);
 
@@ -2687,15 +2687,15 @@ static void gui_settings_network()
 		ImGui::NextColumn();
 		ImGui::RadioButton("GGPO", &netType, 1);
 		ImGui::SameLine(0, style.ItemInnerSpacing.x);
-		ShowHelpMarker("Enable networking using GGPO");
+		ShowHelpMarker("使用 GGPO 启用联网");
 		ImGui::NextColumn();
 		ImGui::RadioButton("Naomi", &netType, 2);
 		ImGui::SameLine(0, style.ItemInnerSpacing.x);
-		ShowHelpMarker("Enable networking for supported Naomi and Atomiswave games");
+		ShowHelpMarker("为支持的 Naomi 和 Atomiswave 游戏启用联网");
 		ImGui::NextColumn();
 		ImGui::RadioButton("Battle Cable", &netType, 3);
 		ImGui::SameLine(0, style.ItemInnerSpacing.x);
-		ShowHelpMarker("Emulate the Taisen (Battle) null modem cable for games that support it");
+		ShowHelpMarker("为支持 Taisen （Battle） 的游戏模拟 Null modem 电缆");
 		ImGui::Columns(1, nullptr, false);
 
 		config::GGPOEnable = false;
@@ -2721,42 +2721,42 @@ static void gui_settings_network()
 		if (config::GGPOEnable)
 		{
 			config::NetworkEnable = false;
-			OptionCheckbox("Play as Player 1", config::ActAsServer,
-					"Deselect to play as player 2");
+			OptionCheckbox("以玩家 1 的身份进行游戏", config::ActAsServer,
+					"取消选择以玩家 2 身份进行游戏");
 			ImGui::InputText("Peer", &config::NetworkServer.get(), ImGuiInputTextFlags_CharsNoBlank, nullptr, nullptr);
 			ImGui::SameLine();
-			ShowHelpMarker("Your peer IP address and optional port");
-			OptionSlider("Frame Delay", config::GGPODelay, 0, 20,
-				"Sets Frame Delay, advisable for sessions with ping >100 ms");
+			ShowHelpMarker("您的对等 IP 地址和可选端口");
+			OptionSlider("帧延迟", config::GGPODelay, 0, 20,
+				"设置 Frame Delay，建议用于 ping 为 >100 ms 的会话");
 
-			ImGui::Text("Left Thumbstick:");
-			OptionRadioButton<int>("Disabled##analogaxis", config::GGPOAnalogAxes, 0, "Left thumbstick not used");
+			ImGui::Text("左摇杆:");
+			OptionRadioButton<int>("Disabled##analogaxis", config::GGPOAnalogAxes, 0, "未使用左摇杆");
 			ImGui::SameLine();
-			OptionRadioButton<int>("Horizontal", config::GGPOAnalogAxes, 1, "Use the left thumbstick horizontal axis only");
+			OptionRadioButton<int>("Horizontal", config::GGPOAnalogAxes, 1, "仅使用左摇杆水平轴");
 			ImGui::SameLine();
-			OptionRadioButton<int>("Full", config::GGPOAnalogAxes, 2, "Use the left thumbstick horizontal and vertical axes");
+			OptionRadioButton<int>("Full", config::GGPOAnalogAxes, 2, "使用左摇杆水平轴和垂直轴");
 
-			OptionCheckbox("Enable Chat", config::GGPOChat, "Open the chat window when a chat message is received");
+			OptionCheckbox("启用聊天", config::GGPOChat, "收到聊天消息时打开聊天窗口");
 			if (config::GGPOChat)
 			{
-				OptionCheckbox("Enable Chat Window Timeout", config::GGPOChatTimeoutToggle, "Automatically close chat window after 20 seconds");
+				OptionCheckbox("启用聊天窗口超时", config::GGPOChatTimeoutToggle, "20 秒后自动关闭聊天窗口");
 				if (config::GGPOChatTimeoutToggle)
 				{
 					char chatTimeout[256];
 					sprintf(chatTimeout, "%d", (int)config::GGPOChatTimeout);
-					ImGui::InputText("Chat Window Timeout (seconds)", chatTimeout, sizeof(chatTimeout), ImGuiInputTextFlags_CharsDecimal, nullptr, nullptr);
+					ImGui::InputText("聊天窗口超时 （秒）", chatTimeout, sizeof(chatTimeout), ImGuiInputTextFlags_CharsDecimal, nullptr, nullptr);
 					ImGui::SameLine();
-					ShowHelpMarker("Sets duration that chat window stays open after new message is received.");
+					ShowHelpMarker("设置收到新消息后聊天窗口保持打开状态的持续时间。");
 					config::GGPOChatTimeout.set(atoi(chatTimeout));
 				}
 			}
-			OptionCheckbox("Network Statistics", config::NetworkStats,
-					"Display network statistics on screen");
+			OptionCheckbox("网络统计", config::NetworkStats,
+					"在屏幕上显示网络统计信息");
 		}
 		else if (config::NetworkEnable)
 		{
-			OptionCheckbox("Act as Server", config::ActAsServer,
-					"Create a local server for Naomi network games");
+			OptionCheckbox("充当服务器", config::ActAsServer,
+					"为 Naomi 网络游戏创建本地服务器");
 			if (!config::ActAsServer)
 			{
 				ImGui::InputText("Server", &config::NetworkServer.get(), ImGuiInputTextFlags_CharsNoBlank, nullptr, nullptr);
@@ -2784,16 +2784,16 @@ static void gui_settings_network()
 		}
 	}
 	ImGui::Spacing();
-	header("Network Options");
+	header("网络选项");
 	{
-		OptionCheckbox("Enable UPnP", config::EnableUPnP, "Automatically configure your network router for netplay");
-		OptionCheckbox("Broadcast Digital Outputs", config::NetworkOutput, "Broadcast digital outputs and force-feedback state on TCP port 8000. "
-				"Compatible with the \"-output network\" MAME option. Arcade games only.");
+		OptionCheckbox("启用UPnP", config::EnableUPnP, “自动配置您的网络路由器以进行 netplay");
+		OptionCheckbox("广播数字输出", config::NetworkOutput, "在 TCP 端口 8000 上广播数字输出和力反馈状态。 "
+				"与\"-output network\" 选项兼容。仅限街机游戏。");
 		{
 			DisabledScope scope(game_started);
 
-			OptionCheckbox("Broadband Adapter Emulation", config::EmulateBBA,
-					"Emulate the Ethernet Broadband Adapter (BBA) instead of the Modem");
+			OptionCheckbox("宽带适配器模拟", config::EmulateBBA,
+					"模拟以太网宽带适配器 （BBA） 而不是调制解调器");
 		}
 		OptionCheckbox("Use DCNet (Experimental)", config::UseDCNet, "Connect to the experimental DCNet cloud service.");
 		ImGui::InputText("ISP User Name", &config::ISPUsername.get(), ImGuiInputTextFlags_CharsNoBlank | ImGuiInputTextFlags_CallbackCharFilter,
@@ -2816,47 +2816,47 @@ static void gui_settings_network()
 static void gui_settings_advanced()
 {
 #if FEAT_SHREC != DYNAREC_NONE
-    header("CPU Mode");
+    header("CPU 模式");
     {
 		ImGui::Columns(2, "cpu_modes", false);
 		OptionRadioButton("Dynarec", config::DynarecEnabled, true,
-			"Use the dynamic recompiler. Recommended in most cases");
+			"使用 dynamic recompiler。在大多数情况下推荐");
 		ImGui::NextColumn();
 		OptionRadioButton("Interpreter", config::DynarecEnabled, false,
-			"Use the interpreter. Very slow but may help in case of a dynarec problem");
+			"使用解释器。非常慢，但在出现 dynarec 问题时可能会有所帮助");
 		ImGui::Columns(1, NULL, false);
 
-		OptionSlider("SH4 Clock", config::Sh4Clock, 100, 300,
-				"Over/Underclock the main SH4 CPU. Default is 200 MHz. Other values may crash, freeze or trigger unexpected nuclear reactions.",
+		OptionSlider("SH4 时钟", config::Sh4Clock, 100, 300,
+				"对主 SH4 CPU 进行超频/降频。默认值为 200 MHz。其他值可能会崩溃、冻结或触发意外的核反应。",
 				"%d MHz");
     }
 	ImGui::Spacing();
 #endif
-    header("Other");
+    header("其他");
     {
-    	OptionCheckbox("HLE BIOS", config::UseReios, "Force high-level BIOS emulation");
-        OptionCheckbox("Multi-threaded emulation", config::ThreadedRendering,
-        		"Run the emulated CPU and GPU on different threads");
+    	OptionCheckbox("HLE BIOS", config::UseReios, "强制高级 BIOS 模拟");
+        OptionCheckbox("多线程模拟", config::ThreadedRendering,
+        		"在不同的线程上运行模拟的 CPU 和 GPU");
 #ifndef __ANDROID
-        OptionCheckbox("Serial Console", config::SerialConsole,
-        		"Dump the Dreamcast serial console to stdout");
+        OptionCheckbox("串行控制台", config::SerialConsole,
+        		"将 Dreamcast 串行控制台转储到 stdout");
 #endif
 		{
 			DisabledScope scope(game_started);
-			OptionCheckbox("Dreamcast 32MB RAM Mod", config::RamMod32MB,
-				"Enables 32MB RAM Mod for Dreamcast. May affect compatibility");
+			OptionCheckbox("Dreamcast 32MB RAM 模组", config::RamMod32MB,
+				"为 Dreamcast 启用 32MB RAM Mod。可能会影响兼容性");
 		}
-        OptionCheckbox("Dump Textures", config::DumpTextures,
-        		"Dump all textures into data/texdump/<game id>");
+        OptionCheckbox("转储纹理", config::DumpTextures,
+        		"将所有纹理转储到 data/texdump/<game id>中");
 
         bool logToFile = cfgLoadBool("log", "LogToFile", false);
-		if (ImGui::Checkbox("Log to File", &logToFile))
+		if (ImGui::Checkbox("记录到文件", &logToFile))
 			cfgSaveBool("log", "LogToFile", logToFile);
         ImGui::SameLine();
-        ShowHelpMarker("Log debug information to flycast.log");
+        ShowHelpMarker("将调试信息记录到 flycast.log");
 #ifdef SENTRY_UPLOAD
-        OptionCheckbox("Automatically Report Crashes", config::UploadCrashLogs,
-        		"Automatically upload crash reports to sentry.io to help in troubleshooting. No personal information is included.");
+        OptionCheckbox("自动报告崩溃", config::UploadCrashLogs,
+        		"自动将崩溃报告上传到 sentry.io 以帮助进行故障排除。不包括任何个人信息。");
 #endif
     }
 
@@ -2890,14 +2890,14 @@ static void customDriverCallback(bool cancelled, std::string selection)
 
 static void gui_settings_about()
 {
-    header("Flycast");
+    header("Flycast（邻家小熊汉化）");
     {
-		ImGui::Text("Version: %s", GIT_VERSION);
+		ImGui::Text("版本号: %s", GIT_VERSION);
 		ImGui::Text("Git Hash: %s", GIT_HASH);
 		ImGui::Text("Build Date: %s", BUILD_DATE);
     }
 	ImGui::Spacing();
-    header("Platform");
+    header("平台");
     {
     	ImGui::Text("CPU: %s",
 #if HOST_CPU == CPU_X86
@@ -2935,7 +2935,7 @@ static void gui_settings_about()
 				);
 #ifdef TARGET_IPHONE
 		const char *getIosJitStatus();
-		ImGui::Text("JIT Status: %s", getIosJitStatus());
+		ImGui::Text("JIT状态: %s", getIosJitStatus());
 #endif
     }
 	ImGui::Spacing();
@@ -2945,8 +2945,8 @@ static void gui_settings_about()
 		header("Vulkan");
 	else if (isDirectX(config::RendererType))
 		header("DirectX");
-	ImGui::Text("Driver Name: %s", GraphicsContext::Instance()->getDriverName().c_str());
-	ImGui::Text("Version: %s", GraphicsContext::Instance()->getDriverVersion().c_str());
+	ImGui::Text("驱动名称: %s", GraphicsContext::Instance()->getDriverName().c_str());
+	ImGui::Text("版本: %s", GraphicsContext::Instance()->getDriverVersion().c_str());
 
 #if defined(__ANDROID__) && HOST_CPU == CPU_ARM64 && USE_VULKAN
 	if (isVulkan(config::RendererType))
@@ -2971,30 +2971,30 @@ static void gui_settings_about()
 					ImGui::OpenPopup("Reset Vulkan");
 				}
 			}
-			else if (ImGui::Button("Upload Custom Driver")) {
+			else if (ImGui::Button("上传自定义驱动程序")) {
 				if (!hostfs::addStorage(false, false, fileSelectTitle, customDriverCallback))
 					ImGui::OpenPopup(fileSelectTitle);
 			}
 
 			if (driverDirty) {
-				ImGui::OpenPopup("Reset Vulkan");
+				ImGui::OpenPopup("重置Vulkan");
 				driverDirty = false;
 			}
 
 			ImguiStyleVar _1(ImGuiStyleVar_WindowPadding, ScaledVec2(20, 20));
 			if (ImGui::BeginPopupModal("Reset Vulkan", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar))
 			{
-				ImGui::Text("Do you want to reset Vulkan to use new driver?");
+				ImGui::Text("是否要重置 Vulkan 以使用新驱动程序？");
 				ImGui::NewLine();
 				ImguiStyleVar _(ImGuiStyleVar_ItemSpacing, ImVec2(uiScaled(20), ImGui::GetStyle().ItemSpacing.y));
 				ImguiStyleVar _1(ImGuiStyleVar_FramePadding, ScaledVec2(10, 10));
-				if (ImGui::Button("Yes"))
+				if (ImGui::Button("是"))
 				{
 					mainui_reinit();
 					ImGui::CloseCurrentPopup();
 				}
 				ImGui::SameLine();
-				if (ImGui::Button("No"))
+				if (ImGui::Button("否"))
 					ImGui::CloseCurrentPopup();
 				ImGui::EndPopup();
 			}
@@ -3353,7 +3353,7 @@ static void gui_display_content()
 #if !defined(TARGET_IPHONE)
 		if (gameListEmpty && gui_state != GuiState::SelectDisk)
 		{
-			const char *label = "Your game list is empty";
+			const char *label = "您的游戏列表为空";
 			// center horizontally
 			const float w = largeFont->CalcTextSizeA(largeFont->FontSize, FLT_MAX, -1.f, label).x + ImGui::GetStyle().FramePadding.x * 2;
 			ImGui::SameLine((ImGui::GetContentRegionMax().x - w) / 2);
@@ -3363,7 +3363,7 @@ static void gui_display_content()
 				ImGui::NewLine();
 				ImGui::Text("%s", label);
 				ImguiStyleVar _(ImGuiStyleVar_FramePadding, ScaledVec2(20, 8));
-				addContent = ImGui::Button("Add Game Folder");
+				addContent = ImGui::Button("添加游戏文件夹");
 				ImGui::PopFont();
 			}
 			ImGui::EndChild();
@@ -3394,8 +3394,8 @@ static bool systemdir_selected_callback(bool cancelled, std::string selection)
 	{
 		if (!make_directory(data_path))
 		{
-			WARN_LOG(BOOT, "Cannot create 'data' directory: %s", data_path.c_str());
-			gui_error("Invalid selection:\nFlycast cannot write to this folder.");
+			WARN_LOG(BOOT, "不能创建 'data' 目录: %s", data_path.c_str());
+			gui_error("无效选择:\nFlycast无法写入此文件夹。");
 			return false;
 		}
 	}
@@ -3405,8 +3405,8 @@ static bool systemdir_selected_callback(bool cancelled, std::string selection)
 	FILE *file = fopen(testPath.c_str(), "w");
 	if (file == nullptr)
 	{
-		WARN_LOG(BOOT, "Cannot write in the 'data' directory");
-		gui_error("Invalid selection:\nFlycast cannot write to this folder.");
+		WARN_LOG(BOOT, "不能写入 'data' 目录");
+		gui_error("无效选择:\nFlycast无法写入此文件夹。");
 		return false;
 	}
 	fclose(file);
@@ -3434,7 +3434,7 @@ static bool systemdir_selected_callback(bool cancelled, std::string selection)
 
 static void gui_display_onboarding()
 {
-	const char *title = "Select Flycast Home Folder";
+	const char *title = "选择 Flycast 主文件夹";
 	ImGui::OpenPopup(title);
 	select_file_popup(title, &systemdir_selected_callback);
 }
@@ -3468,7 +3468,7 @@ static void gui_network_start()
 
 	if (networkStatus.wait_for(std::chrono::milliseconds(0)) == std::future_status::ready)
 	{
-		ImGui::Text("Starting...");
+		ImGui::Text("正在启动……");
 		try {
 			if (networkStatus.get())
 				gui_setState(GuiState::Closed);
@@ -3480,9 +3480,9 @@ static void gui_network_start()
 	}
 	else
 	{
-		ImGui::Text("Starting Network...");
+		ImGui::Text("正在启动网络……");
 		if (NetworkHandshake::instance->canStartNow())
-			ImGui::Text("Press Start to start the game now.");
+			ImGui::Text("按 Start 键立即开始游戏。");
 	}
 	ImGui::Text("%s", get_notification().c_str());
 
@@ -3522,9 +3522,9 @@ static void gui_display_loadscreen()
 			if (label == nullptr)
 			{
 				if (gameLoader.ready())
-					label = "Starting...";
+					label = "正在启动……";
 				else
-					label = "Loading...";
+					label = "正在加载……";
 			}
 
 			if (gameLoader.ready())
@@ -3556,7 +3556,7 @@ static void gui_display_loadscreen()
 		} catch (const FlycastException& ex) {
 			ERROR_LOG(BOOT, "%s", ex.what());
 #ifdef TEST_AUTOMATION
-			die("Game load failed");
+			die("游戏加载失败");
 #endif
 			gui_stop_game(ex.what());
 		}
@@ -3879,15 +3879,15 @@ void gui_takeScreenshot()
 		std::vector<u8> data;
 		getScreenshot(data);
 		if (data.empty()) {
-			os_notify("No screenshot available", 2000);
+			os_notify("没有可用的屏幕截图", 2000);
 		}
 		else
 		{
 			try {
 				hostfs::saveScreenshot(name, data);
-				os_notify("Screenshot saved", 2000, name.c_str());
+				os_notify("屏幕截图已保存", 2000, name.c_str());
 			} catch (const FlycastException& e) {
-				os_notify("Error saving screenshot", 5000, e.what());
+				os_notify("保存屏幕截图时出错", 5000, e.what());
 			}
 		}
 	});
