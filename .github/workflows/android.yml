@@ -32,7 +32,7 @@ jobs:
             
       - name: Disable release signing
         run: sed -i 's/signingConfig signingConfigs.release/signingConfig signingConfigs.debug/g' shell/android-studio/flycast/build.gradle
-        if: github.repository != 'flyinghead/flycast' || github.event_name != 'push'
+        if: github.repository != 'neighbor-bear/flycast' || github.event_name != 'push'
 
       - name: Bump version code
         uses: chkfung/android-version-actions@v1.2.2
@@ -79,7 +79,7 @@ jobs:
         run: |
           cp shell/android-studio/flycast/build/outputs/bundle/release/*.aab shell/android-studio/flycast/build/outputs/apk/release/
           rclone copy shell/android-studio/flycast/build/outputs/apk/release scaleway:flycast-builds/android/${GITHUB_REF#refs/}-$GITHUB_SHA --exclude '*.json'
-        if: github.repository == 'flyinghead/flycast' && github.event_name == 'push'
+        if: github.repository == 'neighbor-bear/flycast' && github.event_name == 'push'
 
       - name: Setup Sentry CLI
         uses: mathieu-bour/setup-sentry-cli@v2
