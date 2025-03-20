@@ -2786,7 +2786,7 @@ static void gui_settings_network()
 	ImGui::Spacing();
 	header("网络选项");
 	{
-		OptionCheckbox("启用UPnP", config::EnableUPnP, “自动配置您的网络路由器以进行 netplay");
+		OptionCheckbox("启用UPnP", config::EnableUPnP, "自动配置您的网络路由器以进行 netplay");
 		OptionCheckbox("广播数字输出", config::NetworkOutput, "在 TCP 端口 8000 上广播数字输出和力反馈状态。 "
 				"与\"-output network\" 选项兼容。仅限街机游戏。");
 		{
