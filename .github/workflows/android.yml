@@ -24,9 +24,6 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
 
-      - uses: actions/cache@v4
-        with:
-          path: ~/.ccache
           
       - name: Bump version code
         uses: chkfung/android-version-actions@v1.2.2
