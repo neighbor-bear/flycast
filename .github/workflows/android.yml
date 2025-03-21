@@ -27,11 +27,7 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: ~/.ccache
-          key: android-ccache-${{ github.sha }}
-          restore-keys: android-ccache-
-            
-      
-
+          
       - name: Bump version code
         uses: chkfung/android-version-actions@v1.2.2
         with:
