@@ -42,12 +42,12 @@ static void addCheat()
 			ImGui::Indent(uiScaled(10));
 			ImGui::Text("ADD CHEAT");
 
-			ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - ImGui::CalcTextSize("Cancel").x - ImGui::GetStyle().FramePadding.x * 4.f
-				- ImGui::CalcTextSize("OK").x - ImGui::GetStyle().ItemSpacing.x);
-			if (ImGui::Button("Cancel"))
+			ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - ImGui::CalcTextSize("取消").x - ImGui::GetStyle().FramePadding.x * 4.f
+				- ImGui::CalcTextSize("好").x - ImGui::GetStyle().ItemSpacing.x);
+			if (ImGui::Button("取消"))
 				ImGui::CloseCurrentPopup();
 			ImGui::SameLine();
-			if (ImGui::Button("OK"))
+			if (ImGui::Button("好"))
 			{
 				try {
 					cheatManager.addGameSharkCheat(cheatName, cheatCode);
@@ -64,8 +64,8 @@ static void addCheat()
 
 		ImGui::BeginChild(ImGui::GetID("input"), ImVec2(0, 0), ImGuiChildFlags_Border, ImGuiWindowFlags_NavFlattened);
 		{
-			ImGui::InputText("Name", cheatName, sizeof(cheatName), 0, nullptr, nullptr);
-			ImGui::InputTextMultiline("Code", cheatCode, sizeof(cheatCode), ImVec2(0, ImGui::GetTextLineHeight() * 8), 0, nullptr, nullptr);
+			ImGui::InputText("名称", cheatName, sizeof(cheatName), 0, nullptr, nullptr);
+			ImGui::InputTextMultiline("代码", cheatCode, sizeof(cheatCode), ImVec2(0, ImGui::GetTextLineHeight() * 8), 0, nullptr, nullptr);
 		}
 		ImGui::EndChild();
 		ImGui::EndPopup();
@@ -88,32 +88,32 @@ void gui_cheats()
     ImGui::Begin("##main", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar
     		| ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize);
 
-	const char *title = "Select a cheat file";
+	const char *title = "选择一个金手指文件";
     {
 		ImguiStyleVar _(ImGuiStyleVar_FramePadding, ScaledVec2(20, 8));
 		ImGui::AlignTextToFramePadding();
 		ImGui::Indent(uiScaled(10));
-		ImGui::Text(ICON_FA_MASK "  CHEATS");
+		ImGui::Text(ICON_FA_MASK "  金手指");
 
-		ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - ImGui::CalcTextSize("Add").x  - ImGui::CalcTextSize("Close").x - ImGui::GetStyle().FramePadding.x * 6.f
-			- ImGui::CalcTextSize("Load").x - ImGui::GetStyle().ItemSpacing.x * 2);
-		if (ImGui::Button("Add"))
+		ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - ImGui::CalcTextSize("添加").x  - ImGui::CalcTextSize("关闭").x - ImGui::GetStyle().FramePadding.x * 6.f
+			- ImGui::CalcTextSize("加载").x - ImGui::GetStyle().ItemSpacing.x * 2);
+		if (ImGui::Button("添加"))
 			ImGui::OpenPopup("addCheat");
 		addCheat();
 		ImGui::SameLine();
 #ifdef __ANDROID__
-		if (ImGui::Button("Load"))
+		if (ImGui::Button("加载"))
 		{
 			if (!hostfs::addStorage(false, true, title, cheatFileSelected))
 				ImGui::OpenPopup(title);
 		}
 #else
-		if (ImGui::Button("Load"))
+		if (ImGui::Button("加载"))
 			ImGui::OpenPopup(title);
 #endif
 
 		ImGui::SameLine();
-		if (ImGui::Button("Close"))
+		if (ImGui::Button("关闭"))
 			gui_setState(GuiState::Commands);
 
 		ImGui::Unindent(uiScaled(10));
@@ -127,7 +127,7 @@ void gui_cheats()
 	ImGui::BeginChild(ImGui::GetID("cheats"), ImVec2(0, 0), ImGuiChildFlags_Border, ImGuiWindowFlags_DragScrolling | ImGuiWindowFlags_NavFlattened);
     {
 		if (cheatManager.cheatCount() == 0)
-			ImGui::Text("(No cheat loaded)");
+			ImGui::Text("(没有加载金手指)");
 		else
 			for (size_t i = 0; i < cheatManager.cheatCount(); i++)
 			{

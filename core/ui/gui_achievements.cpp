@@ -280,7 +280,7 @@ void achievementList()
 	ImGui::Begin("##achievements", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize);
 
 	{
-		float w = ImGui::GetWindowContentRegionMax().x - ImGui::CalcTextSize("Close").x - ImGui::GetStyle().ItemSpacing.x * 2 - ImGui::GetStyle().WindowPadding.x
+		float w = ImGui::GetWindowContentRegionMax().x - ImGui::CalcTextSize("关闭").x - ImGui::GetStyle().ItemSpacing.x * 2 - ImGui::GetStyle().WindowPadding.x
 				- uiScaled(80.f + 20.f * 2);	// image width and button frame padding
 		Game game = getCurrentGame();
 		ImguiFileTexture tex(game.image);
@@ -291,19 +291,19 @@ void achievementList()
 		ImGui::Text("%s", game.title.c_str());
 		ImGui::PopFont();
 		std::stringstream ss;
-		ss << "You have unlocked " << game.unlockedAchievements << " of " << game.totalAchievements
+		ss << "您已解锁 " << game.unlockedAchievements << " of " << game.totalAchievements
 				<< " achievements and " << game.points << " of " << game.totalPoints << " points.";
 		{
 			ImguiStyleColor _(ImGuiCol_Text, ImVec4(0.75f, 0.75f, 0.75f, 1.f));
 			ImGui::TextWrapped("%s", ss.str().c_str());
 		}
 		if (settings.raHardcoreMode)
-			ImGui::Text("Hardcore Mode");
+			ImGui::Text("硬核模式");
 		ImGui::EndChild();
 
 		ImGui::SameLine();
 		ImguiStyleVar _(ImGuiStyleVar_FramePadding, ScaledVec2(20, 8));
-		if (ImGui::Button("Close"))
+		if (ImGui::Button("关闭"))
 			gui_setState(GuiState::Commands);
     }
 

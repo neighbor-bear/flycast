@@ -1202,7 +1202,7 @@ static void controller_mapping_popup(const std::shared_ptr<GamepadDevice>& gamep
 		static int last_item_current_map_idx = 2;
 
 		std::shared_ptr<InputMapping> input_mapping = gamepad->get_input_mapping();
-		if (input_mapping == NULL || ImGui::Button("Done", ScaledVec2(100, 30)))
+		if (input_mapping == NULL || ImGui::Button("完成", ScaledVec2(100, 30)))
 		{
 			ImGui::CloseCurrentPopup();
 			gamepad->save_mapping(map_system);
@@ -2348,8 +2348,8 @@ static void gui_settings_video()
     	}
 #endif
     	OptionCheckbox("在游戏中显示 VMU", config::FloatVMUs, "在游戏中显示 VMU LCD 屏幕");
-    	OptionCheckbox("全帧缓冲区仿真", config::EmulateFramebuffer,
-    			"完全精确的 VRAM 帧缓冲区仿真。帮助直接访问帧缓冲区以获得特殊效果的游戏。"
+    	OptionCheckbox("全帧缓冲区模拟", config::EmulateFramebuffer,
+    			"完全精确的 VRAM 帧缓冲区模拟。帮助直接访问帧缓冲区以获得特殊效果的游戏。"
     			"非常慢，与升级和宽屏不兼容。");
     	OptionCheckbox("加载自定义纹理", config::CustomTextures,
     			"从 data/textures/<game id 加载自定义/高分辨率纹理>");
@@ -2799,7 +2799,7 @@ static void gui_settings_network()
 		{
 			DisabledScope scope(game_started);
 
-			OptionCheckbox("宽带适配器仿真", config::EmulateBBA,
+			OptionCheckbox("宽带适配器模拟", config::EmulateBBA,
 					"模拟以太网宽带适配器 （BBA） 而不是调制解调器");
 		}
 		OptionCheckbox("使用 DCNet", config::UseDCNet, "使用 DCNet 云服务进行 Dreamcast Internet 访问。");
@@ -2848,7 +2848,7 @@ static void gui_settings_advanced()
 
 		if (ram == nullptr) {
 			const ImVec4 gray(0.75f, 0.75f, 0.75f, 1.f);
-			ImGui::TextColored(gray, "在仿真开始之前，RAM 地址不可用");
+			ImGui::TextColored(gray, "在模拟开始之前，RAM 地址不可用");
 		} else {
 			ImGui::Columns(3, "virtualMemoryAddress", false);
 			ImGui::Text("RAM: %p", ram);
@@ -2864,7 +2864,7 @@ static void gui_settings_advanced()
 	header("调试");
 	{
 		OptionCheckbox("启用 GDB", config::GDB, "GDB 调试支持，禁用 Dynarec 并在连接调试器时显着降低性能。");
-		OptionCheckbox("等待连接", config::GDBWaitForConnection, "连接调试器后开始仿真。");
+		OptionCheckbox("等待连接", config::GDBWaitForConnection, "连接调试器后开始模拟。");
 #ifndef __ANDROID
 		OptionCheckbox("串行控制台", config::SerialConsole, "将 Dreamcast 串行控制台转储到 stdout");
 		OptionCheckbox("串行 PTY", config::SerialPTY, "需要选项“串行控制台”才能工作");
@@ -2884,8 +2884,8 @@ static void gui_settings_advanced()
 #endif
     header("其他");
     {
-    	OptionCheckbox("HLE BIOS", config::UseReios, "强制高级 BIOS 仿真");
-        OptionCheckbox("多线程仿真", config::ThreadedRendering,
+    	OptionCheckbox("HLE BIOS", config::UseReios, "强制高级 BIOS 模拟");
+        OptionCheckbox("多线程模拟", config::ThreadedRendering,
         		"在不同线程上运行模拟的 CPU 和 GPU");
 #if !defined(__ANDROID) && !defined(GDB_SERVER)
         OptionCheckbox("串行控制台", config::SerialConsole,
@@ -2941,7 +2941,7 @@ static void gui_settings_about()
 {
     header("Flycast");
     {
-		ImGui::Text("版本: %s", GIT_VERSION);
+		ImGui::Text("版本（邻家小熊汉化）: %s", GIT_VERSION);
 		ImGui::Text("Git Hash: %s", GIT_HASH);
 		ImGui::Text("构建日期: %s", BUILD_DATE);
     }
@@ -3063,11 +3063,11 @@ static void gui_display_settings()
 	fullScreenWindow(false);
 	ImguiStyleVar _(ImGuiStyleVar_WindowRounding, 0);
 
-    ImGui::Begin("Settings", NULL, ImGuiWindowFlags_DragScrolling | ImGuiWindowFlags_NoResize
+    ImGui::Begin("设置", NULL, ImGuiWindowFlags_DragScrolling | ImGuiWindowFlags_NoResize
     		| ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
 	ImVec2 normal_padding = ImGui::GetStyle().FramePadding;
 
-    if (ImGui::Button("Done", ScaledVec2(100, 30)))
+    if (ImGui::Button("完成", ScaledVec2(100, 30)))
     {
     	if (uiUserScaleUpdated)
     	{
@@ -3269,7 +3269,7 @@ static void gui_display_content()
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ScaledVec2(20, 8));
     ImGui::AlignTextToFramePadding();
     ImGui::Indent(uiScaled(10));
-    ImGui::Text("GAMES");
+    ImGui::Text("游戏");
     ImGui::Unindent(uiScaled(10));
 
     static ImGuiTextFilter filter;
@@ -3283,8 +3283,8 @@ static void gui_display_content()
     {
 #ifdef TARGET_UWP
 		ImGui::SameLine(ImGui::GetContentRegionMax().x - settingsBtnW
-				- ImGui::GetStyle().FramePadding.x * 2.0f  - ImGui::GetStyle().ItemSpacing.x - ImGui::CalcTextSize("Load...").x);
-		if (ImGui::Button("Load..."))
+				- ImGui::GetStyle().FramePadding.x * 2.0f  - ImGui::GetStyle().ItemSpacing.x - ImGui::CalcTextSize("加载中……").x);
+		if (ImGui::Button("加载中……"))
 			gui_load_game();
 		ImGui::SameLine();
 #elif defined(__SWITCH__)
@@ -3302,8 +3302,8 @@ static void gui_display_content()
     else
     {
 		ImGui::SameLine(ImGui::GetContentRegionMax().x
-				- ImGui::GetStyle().FramePadding.x * 2.0f - ImGui::CalcTextSize("Cancel").x);
-		if (ImGui::Button("Cancel"))
+				- ImGui::GetStyle().FramePadding.x * 2.0f - ImGui::CalcTextSize("取消").x);
+		if (ImGui::Button("取消"))
 			gui_setState(GuiState::Commands);
     }
     ImGui::PopStyleVar();
@@ -3517,7 +3517,7 @@ static void gui_network_start()
 
 	if (networkStatus.wait_for(std::chrono::milliseconds(0)) == std::future_status::ready)
 	{
-		ImGui::Text("Starting...");
+		ImGui::Text("加载中……");
 		try {
 			if (networkStatus.get())
 				gui_setState(GuiState::Closed);
@@ -3599,7 +3599,7 @@ static void gui_display_loadscreen()
 
 				float currentwidth = ImGui::GetContentRegionAvail().x;
 				ImGui::SetCursorPosX((currentwidth - uiScaled(100.f)) / 2.f + ImGui::GetStyle().WindowPadding.x);
-				if (ImGui::Button("Cancel", ScaledVec2(100.f, 0)))
+				if (ImGui::Button("取消", ScaledVec2(100.f, 0)))
 					gameLoader.cancel();
 			}
 		} catch (const FlycastException& ex) {

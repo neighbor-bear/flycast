@@ -73,15 +73,15 @@ private:
         	discordPresence.largeImageKey = imageUrl.c_str();
         	discordPresence.largeImageText = settings.content.title.c_str();
         	discordPresence.smallImageKey = "icon-512";
-        	discordPresence.smallImageText = "Flycast is a Dreamcast, Naomi and Atomiswave emulator";
+        	discordPresence.smallImageText = "Flycast 是 Dreamcast、Naomi 和 Atomiswave 模拟器";
         }
         else
         {
         	discordPresence.largeImageKey = "icon-512";
-        	discordPresence.largeImageText = "Flycast is a Dreamcast, Naomi and Atomiswave emulator";
+        	discordPresence.largeImageText = "Flycast 是 Dreamcast、Naomi 和 Atomiswave 模拟器";
         }
         if (settings.network.online)
-        	discordPresence.details = "Online";
+        	discordPresence.details = "线上";
         Discord_UpdatePresence(&discordPresence);
 	}
 

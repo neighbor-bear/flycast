@@ -69,13 +69,13 @@ void displayCommands()
 
     ImGui::Begin("##vgamepad", NULL, ImGuiWindowFlags_NoDecoration);
 
-	if (ImGui::Button("Save", ScaledVec2(150, 50)))
+	if (ImGui::Button("保存", ScaledVec2(150, 50)))
 	{
 		stopEditing(false);
 		gui_setState(GuiState::Settings);
 	}
 	ImGui::SameLine();
-	if (ImGui::Button("Reset", ScaledVec2(150, 50)))
+	if (ImGui::Button("重置", ScaledVec2(150, 50)))
 	{
 		resetEditing();
 		startEditing();
@@ -83,7 +83,7 @@ void displayCommands()
 	}
 
 	ImGui::SameLine();
-	if (ImGui::Button("Cancel", ScaledVec2(150, 50)))
+	if (ImGui::Button("取消", ScaledVec2(150, 50)))
 	{
 		stopEditing(true);
 		gui_setState(GuiState::Settings);
