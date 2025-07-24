@@ -1375,7 +1375,7 @@ static void controller_mapping_popup(const std::shared_ptr<GamepadDevice>& gamep
 			if (ImGui::Button("Map"))
 			{
 				map_start_time = getTimeMs();
-				ImGui::OpenPopup("Map Control");
+				ImGui::OpenPopup("控制器映射");
 				mapped_device = gamepad;
 				mapped_code = -1;
 				gamepad->detectButtonOrAxisInput([](u32 code, bool analog, bool positive)
@@ -3273,7 +3273,7 @@ static void gui_display_content()
     ImGui::Unindent(uiScaled(10));
 
     static ImGuiTextFilter filter;
-    const float settingsBtnW = iconButtonWidth(ICON_FA_GEAR, "Settings");
+    const float settingsBtnW = iconButtonWidth(ICON_FA_GEAR, "设置");
 #if !defined(__ANDROID__) && !defined(TARGET_IPHONE) && !defined(TARGET_UWP) && !defined(__SWITCH__)
 	ImGui::SameLine(0, uiScaled(32));
 	filter.Draw("Filter", ImGui::GetContentRegionAvail().x - ImGui::GetStyle().ItemSpacing.x - uiScaled(32)
@@ -3296,7 +3296,7 @@ static void gui_display_content()
 #else
 		ImGui::SameLine(ImGui::GetContentRegionMax().x - settingsBtnW);
 #endif
-		if (iconButton(ICON_FA_GEAR, "Settings"))
+		if (iconButton(ICON_FA_GEAR, "设置"))
 			gui_setState(GuiState::Settings);
     }
     else
@@ -3402,7 +3402,7 @@ static void gui_display_content()
 #if !defined(TARGET_IPHONE)
 		if (gameListEmpty && gui_state != GuiState::SelectDisk)
 		{
-			const char *label = "你的游戏列表为空";
+			const char *label = "Yóu xì liè biǎo wéi kōng";
 			// center horizontally
 			const float w = largeFont->CalcTextSizeA(largeFont->FontSize, FLT_MAX, -1.f, label).x + ImGui::GetStyle().FramePadding.x * 2;
 			ImGui::SameLine((ImGui::GetContentRegionMax().x - w) / 2);
@@ -3412,7 +3412,7 @@ static void gui_display_content()
 				ImGui::NewLine();
 				ImGui::Text("%s", label);
 				ImguiStyleVar _(ImGuiStyleVar_FramePadding, ScaledVec2(20, 8));
-				addContent = ImGui::Button("添加游戏文件夹");
+				addContent = ImGui::Button("Tiān jiā yóu xì wén jiàn jiā");
 				ImGui::PopFont();
 			}
 			ImGui::EndChild();
@@ -3531,7 +3531,7 @@ static void gui_network_start()
 	{
 		ImGui::Text("启动网络...");
 		if (NetworkHandshake::instance->canStartNow())
-			ImGui::Text("按 开始 立即开始游戏。");
+			ImGui::Text("按开始键开始游戏。");
 	}
 	ImGui::Text("%s", get_notification().c_str());
 
